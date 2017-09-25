@@ -15,3 +15,11 @@ vector<Node*>* Node::getNeighbors(){
 void Node::addNeighbor(Node* neighbor){
     this->neighbors->push_back(neighbor);
 }
+
+bool Node::isVisited(){
+    return this->visited;
+}
+
+void Node::visit(){
+    this->visited = true;
+}
