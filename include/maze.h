@@ -11,11 +11,13 @@ public:
     Maze(std::string filename);
     Node* getStart();
     std::vector<Node*>* getGoals();
+    void printSolution();
 
 private:
     Node* start;
     std::vector<Node*>* goals;
     Node*** maze;
+    int w, h;
 
 };
 

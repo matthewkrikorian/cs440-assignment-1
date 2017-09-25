@@ -7,33 +7,34 @@ using namespace std;
 Maze::Maze(string filename){
     ifstream input(filename);
 
+    w = 0;
+    h = 0;
 
     string temp;
-    int h, v = 0;
     //Get height and width of maze, count number of goals
     while(getline(input, temp)){
-        if(h == 0){
-            h = temp.length();
+        if(w == 0){
+            w = temp.length();
         }
-        v++;
+        h++;
     }
 
     //Allocate 2d array to hold contents of file
-    maze = new Node**[h];
-    for(int i = 0; i < h; i++){
-        maze[i] = new Node*[v];
+    maze = new Node**[w];
+    for(int i = 0; i < w; i++){
+        maze[i] = new Node*[h];
     }
 
     //Reset the seek position of the input stream
+    input.clear();
     input.seekg(0, ios::beg);
 
     goals = new vector<Node*>();
 
     // Populate the maze array, record locations of start and goals
     int y = 0;
-    int startx, starty;
     while(getline(input, temp)){
-        for(int x = 0; x < h; x++){
+        for(int x = 0; x < w; x++){
             //Don't create nodes for walls
             if(temp[x] != '%')
                 maze[x][y] = new Node(x, y);
@@ -50,21 +51,21 @@ Maze::Maze(string filename){
     }
 
     //Create graph
-    for(int i = 0; i < h; i ++){
-        for(int j = 0; j < v; j++){
+    for(int i = 0; i < w; i ++){
+        for(int j = 0; j < h; j++){
             if(maze[i][j] == NULL)
                 continue;
 
             if(i - 1 >= 0 && maze[i-1][j] != NULL)
                 maze[i][j]->addNeighbor(maze[i-1][j]);
 
-            if(i + 1 < h && maze[i+1][j] != NULL)
+            if(i + 1 < w && maze[i+1][j] != NULL)
                 maze[i][j]->addNeighbor(maze[i+1][j]);
 
             if(j - 1 >= 0 && maze[i][j-1] != NULL)
                 maze[i][j]->addNeighbor(maze[i][j-1]);
 
-            if(j+1 < v && maze[i][j+1] != NULL)
+            if(j+1 < h && maze[i][j+1] != NULL)
                 maze[i][j]->addNeighbor(maze[i][j+1]);
 
         }
@@ -78,4 +79,24 @@ Node* Maze::getStart(){
 
 vector<Node*>* Maze::getGoals(){
     return goals;
+}
+
+void Maze::printSolution(){
+    for(int i = 0; i < h; i++){
+        for(int j = 0; j < w; j++){
+            if(maze[j][i] == NULL){
+                cout << '%';
+            }
+            else if(maze[j][i] == start){
+                cout << 'P';
+            }
+            else if(maze[j][i]->isVisited()){
+                cout << '.';
+            }
+            else {
+                cout << ' ';
+            }
+        }
+        cout << '\n';
+    }
 }

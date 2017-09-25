@@ -15,19 +15,17 @@ void search(Maze* maze, string method){
     unordered_map<Node*, Node*> explored;
 
     Frontier frontier;
-    frontier.push_back(start);
+    frontier.push_back(start, NULL);
 
-    Node* prev = NULL;
     Node* cur = NULL;
     //Do search
     while(!frontier.empty()){
-        if(method == "DFS"){
-            cur = frontier.pop_back();
+        if(method.compare("DFS") == 0){
+            cur = frontier.pop_back(explored);
         }
-        else if(method == "BFS"){
-            cur = frontier.pop_front();
+        else if(method.compare("BFS") == 0){
+            cur = frontier.pop_front(explored);
         }
-        explored[cur] = prev;
 
         // Reached goal
         if(cur == goal){
@@ -41,7 +39,7 @@ void search(Maze* maze, string method){
                     // Must not be on frontier (unless cur has lower path cost to it)
                     FrontierNode* found = frontier.find(neighbor);
                     if(found == NULL) // can add to frontier
-                        frontier.push_back(neighbor);
+                        frontier.push_back(neighbor, cur);
                     else{
                         //nothing for now, check path cost for A* later
                     }
@@ -62,7 +60,8 @@ void search(Maze* maze, string method){
 }
 
 int main(int argc, char const *argv[]) {
-
-
+    Maze* maze = new Maze("./mazes/1-1-medium-maze.txt");
+    search(maze, "DFS");
+    maze->printSolution();
     return true;
 }

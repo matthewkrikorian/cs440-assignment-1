@@ -6,6 +6,7 @@
 
 struct FrontierNode{
     Node* node;
+    Node* prevNode;
     FrontierNode* next;
     FrontierNode* prev;
     int value;
@@ -14,10 +15,10 @@ struct FrontierNode{
 class Frontier {
 public:
     Frontier();
-    void push_back(Node* node, int val=0);
-    void push_front(Node* node, int val=0);
-    Node* pop_back();
-    Node* pop_front();
+    void push_back(Node* node, Node* prevNode, int val=0);
+    void push_front(Node* node, Node* prevNode, int val=0);
+    Node* pop_back(std::unordered_map<Node*, Node*>& history);
+    Node* pop_front(std::unordered_map<Node*, Node*>& history);
     FrontierNode* getHead();
     FrontierNode* getTail();
     Node* remove(FrontierNode* fnode);
