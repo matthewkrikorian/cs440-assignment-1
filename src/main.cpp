@@ -59,7 +59,7 @@ void search(Maze* maze, string method){
 }
 
 int main(int argc, char const *argv[]) {
-    Maze* maze = new Maze("./mazes/1-1-medium-maze.txt");
+    Maze* maze = new Maze("./mazes/1-1-big-maze.txt");
     search(maze, "DFS");
     maze->printSolution();
     return true;

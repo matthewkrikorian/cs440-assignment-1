@@ -6,6 +6,7 @@ Node::Node(int x, int y){
     this->x = x;
     this->y = y;
     this->neighbors = new std::vector<Node*>();
+    this->visited = false;
 }
 
 vector<Node*>* Node::getNeighbors(){
