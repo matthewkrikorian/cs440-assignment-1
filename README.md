@@ -9,3 +9,5 @@ The purpose of this repository is to use general purpose search algorithms to so
 `build` — Holds all of the `.o` files that are used when compiling
 
 `bin` — Holds all of the `.exe` files that are used to execute the search program
+
+`tex` — Hold the `.tex` file as well as all the related images used in the document
