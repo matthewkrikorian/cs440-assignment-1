@@ -46,16 +46,15 @@ void search(Maze* maze, string method){
                 }
             }
         }
-
-        //backtracking
-        while(cur != NULL){
-            cur->visit();
-            cur = explored[cur]; // go to previous
-        }
     }
 
+    //backtracking
+    while(cur != NULL){
+        cur->visit();
+        cur = explored[cur]; // go to previous
+    }
 
-
+    cout << explored.size() << " nodes explored during search.\n";
 
 }
 
