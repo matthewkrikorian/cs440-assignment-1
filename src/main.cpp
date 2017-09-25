@@ -13,6 +13,7 @@ int manhattanDistance(Node* n1, Node* n2){
 }
 
 void search(Maze* maze, string method){
+    cout << "Starting " << method << " search on " << maze->getName() << '\n';
     Node* start = maze->getStart();
     vector<Node*>* goals = maze->getGoals();
     Node* goal = goals->front();
@@ -49,7 +50,7 @@ void search(Maze* maze, string method){
                     // Must not be on frontier (unless cur has lower path cost to it)
                     FrontierNode* found = frontier.find(neighbor);
                     if(found == NULL) // can add to frontier
-                        frontier.push_back(neighbor, cur, manhattanDistance(cur, goal));
+                        frontier.push_back(neighbor, cur, manhattanDistance(neighbor, goal));
                     else {
                         // Update path costs if applicable
                         // if(found->pathCost > curFrontierNode->pathCost+1){
@@ -75,8 +76,14 @@ void search(Maze* maze, string method){
 }
 
 int main(int argc, char const *argv[]) {
-    Maze* maze = new Maze("./mazes/1-1-big-maze.txt");
-    search(maze, "greedy");
-    maze->printSolution();
+    Maze* maze1 = new Maze("./mazes/1-1-open-maze.txt");
+    Maze* maze2 = new Maze("./mazes/1-1-open-maze.txt");
+    Maze* maze3 = new Maze("./mazes/1-1-open-maze.txt");
+    search(maze1, "DFS");
+    maze1->printSolution();
+    search(maze2, "BFS");
+    maze2->printSolution();
+    search(maze3, "greedy");
+    maze3->printSolution();
     return true;
 }

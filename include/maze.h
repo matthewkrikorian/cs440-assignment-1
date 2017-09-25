@@ -4,6 +4,7 @@
 #include "node.h"
 
 #include <vector>
+#include <string>
 
 class Maze {
 
@@ -12,8 +13,10 @@ public:
     Node* getStart();
     std::vector<Node*>* getGoals();
     void printSolution();
+    std::string getName();
 
 private:
+    std::string name;
     Node* start;
     std::vector<Node*>* goals;
     Node*** maze;

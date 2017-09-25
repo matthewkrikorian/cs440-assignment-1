@@ -6,6 +6,7 @@ using namespace std;
 
 Maze::Maze(string filename){
     ifstream input(filename);
+    name = filename;
 
     w = 0;
     h = 0;
@@ -99,4 +100,8 @@ void Maze::printSolution(){
         }
         cout << '\n';
     }
+}
+
+string Maze::getName(){
+    return name;
 }
