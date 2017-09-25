@@ -14,13 +14,15 @@ void Frontier::push_back(Node* node, Node* prevNode, int val){
     fnode->prevNode = prevNode;
     fnode->next = NULL;
     fnode->prev = tail;
-    fnode->value = val;
+    fnode->heuristic = val;
+    fnode->pathCost = 0;
+    minNodeHeap.push(*fnode);
+    if(head == NULL){
+        head = fnode;
+    }
     tail = fnode;
     if(tail->prev != NULL){
         tail->prev->next = tail;
-    }
-    if(head == NULL){
-        head = tail;
     }
     nodeMap[node] = fnode;
     size++;
@@ -32,50 +34,47 @@ void Frontier::push_front(Node* node, Node* prevNode, int val){
     fnode->prevNode = prevNode;
     fnode->next = head;
     fnode->prev = NULL;
-    fnode->value = val;
+    fnode->heuristic = val;
+    fnode->pathCost = 0;
+    minNodeHeap.push(*fnode);
+    if(tail == NULL){
+        tail = fnode;
+    }
     head = fnode;
     if(head->next != NULL){
-        head->next->prev = head;
-    }
-    if(tail == NULL){
-        tail = head;
+        head->next->prev = tail;
     }
     nodeMap[node] = fnode;
     size++;
 }
 
 Node* Frontier::pop_back(unordered_map<Node*, Node*>& history){
-    Node* ret = tail->node;
-    Node* prevNode = tail->prevNode;
-    FrontierNode* prev = tail->prev;
-    delete tail;
-    if(prev != NULL)
-        prev->next = NULL;
-    if(head == tail){
-        head = NULL;
-    }
-    tail = prev;
-    size--;
-    nodeMap.erase(ret);
-    history[ret] = prevNode;
-    return ret;
+    if(empty()) return NULL;
+    return remove(tail, history);
 }
 
 Node* Frontier::pop_front(unordered_map<Node*, Node*>& history){
-    Node* ret = head->node;
-    Node* prevNode = head->prevNode;
-    FrontierNode* next = head->next;
-    delete head;
-    if(next != NULL)
-        next->prev = NULL;
-    if(head == tail){
-        tail = NULL;
+    if(empty()) return NULL;
+    return remove(head, history);
+}
+
+Node* Frontier::pop_min(unordered_map<Node*, Node*>& history){
+    Node* ret = NULL;
+    FrontierNode* actual;
+    while(!minNodeHeap.empty()){
+        FrontierNode cur = minNodeHeap.top();
+        minNodeHeap.pop();
+        actual = this->find(cur.node);
+        if(actual == NULL) continue;
+        //Make sure that FrontierNode in minNodeHeap was up to date
+        if(cur.pathCost != actual->pathCost || cur.heuristic != actual->heuristic){
+            continue;
+        }
+        else {
+            //If it was up to date, remove it and return it
+            return remove(actual, history);
+        }
     }
-    head = next;
-    size--;
-    nodeMap.erase(ret);
-    history[ret] = prevNode;
-    return ret;
 }
 
 FrontierNode* Frontier::getHead(){
@@ -90,25 +89,32 @@ bool Frontier::empty(){
     return size == 0;
 }
 
-Node* Frontier::remove(FrontierNode* fnode){
+Node* Frontier::remove(FrontierNode* fnode, unordered_map<Node*, Node*>& history){
     Node* ret = fnode->node;
+    Node* prevNode = fnode->prevNode;
     FrontierNode* prev = fnode->prev;
     FrontierNode* next = fnode->next;
-    delete fnode;
     if(prev != NULL){
         prev->next = next;
     }
     if(next != NULL){
         next->prev = prev;
     }
-    if(head == fnode){
+    if(head == tail){
+        //do nothing
+        head = NULL;
+        tail = head;
+    }
+    else if(head == fnode){
         head = next;
     }
-    if(tail == fnode){
+    else if(tail == fnode){
         tail = prev;
     }
+    delete fnode;
     size --;
     nodeMap.erase(ret);
+    history[ret] = prevNode;
     return ret;
 }
 
@@ -117,4 +123,8 @@ FrontierNode* Frontier::find(Node* node){
         return nodeMap[node];
     else
         return NULL;
+}
+
+void Frontier::update(FrontierNode* fnode){
+    minNodeHeap.push(*fnode);
 }

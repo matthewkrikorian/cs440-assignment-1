@@ -11,6 +11,8 @@ public:
     void addNeighbor(Node*);
     bool isVisited();
     void visit();
+    int getX();
+    int getY();
 
 private:
     int x, y;

@@ -24,3 +24,12 @@ bool Node::isVisited(){
 void Node::visit(){
     this->visited = true;
 }
+
+int Node::getX(){
+    return x;
+}
+
+
+int Node::getY(){
+    return y;
+}

@@ -2,6 +2,8 @@
 #define FRONTIER_H
 
 #include <unordered_map>
+#include <queue>
+#include <vector>
 #include "node.h"
 
 struct FrontierNode{
@@ -9,7 +11,8 @@ struct FrontierNode{
     Node* prevNode;
     FrontierNode* next;
     FrontierNode* prev;
-    int value;
+    int pathCost;
+    int heuristic;
 };
 
 class Frontier {
@@ -19,17 +22,27 @@ public:
     void push_front(Node* node, Node* prevNode, int val=0);
     Node* pop_back(std::unordered_map<Node*, Node*>& history);
     Node* pop_front(std::unordered_map<Node*, Node*>& history);
+    Node* pop_min(std::unordered_map<Node*, Node*>& history);
     FrontierNode* getHead();
     FrontierNode* getTail();
-    Node* remove(FrontierNode* fnode);
     bool empty();
     FrontierNode* find(Node* node);
+    void update(FrontierNode* fnode);
 
 private:
     FrontierNode* head;
     FrontierNode* tail;
     int size;
     std::unordered_map<Node*, FrontierNode*> nodeMap;
+
+    struct compare{
+        bool operator()(const FrontierNode l, const FrontierNode r)
+        {
+           return l.heuristic + l.pathCost > r.heuristic + r.pathCost;
+        }
+    };
+    std::priority_queue<FrontierNode, std::vector<FrontierNode>, compare> minNodeHeap;
+    Node* remove(FrontierNode* fnode, std::unordered_map<Node*, Node*>& history);
 
 
 
