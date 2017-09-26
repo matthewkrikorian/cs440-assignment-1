@@ -21,22 +21,23 @@ void search(Maze* maze, string method){
     unordered_map<Node*, Node*> explored;
 
     Frontier frontier;
-    frontier.push_back(start, NULL, manhattanDistance(start, goal));
+    frontier.push_back(start, NULL, manhattanDistance(start, goal), 0);
 
     Node* cur = NULL;
+    FrontierNode* curExploredNode = NULL;
     //Do search
     while(!frontier.empty()){
         if(method.compare("DFS") == 0){
-            cur = frontier.pop_back(explored);
+            curExploredNode = frontier.pop_back(explored);
         }
         else if(method.compare("BFS") == 0){
-            cur = frontier.pop_front(explored);
+            curExploredNode = frontier.pop_front(explored);
         }
-        else if(method.compare("greedy") == 0){
-            cur = frontier.pop_min(explored);
+        else if(method.compare("greedy") == 0 || method.compare("A*") == 0){
+            curExploredNode = frontier.pop_min(explored);
         }
 
-        //cur = curFrontierNode->node;
+        cur = curExploredNode->node;
 
         // Reached goal
         if(cur == goal){
@@ -50,14 +51,14 @@ void search(Maze* maze, string method){
                     // Must not be on frontier (unless cur has lower path cost to it)
                     FrontierNode* found = frontier.find(neighbor);
                     if(found == NULL) // can add to frontier
-                        frontier.push_back(neighbor, cur, manhattanDistance(neighbor, goal));
+                        frontier.push_back(neighbor, cur, manhattanDistance(neighbor, goal), curExploredNode->pathCost + 1);
                     else {
                         // Update path costs if applicable
-                        // if(found->pathCost > curFrontierNode->pathCost+1){
-                        //     found->pathCost = curFrontierNode->pathCost+1
-                        //     found->prevNode = cur;
-                        //     frontier.update(found); //updates minNodeHeap
-                        // }
+                        if( method.compare("A*") == 0 && found->pathCost > curExploredNode->pathCost + 1){
+                            found->pathCost = curExploredNode->pathCost+1;
+                            found->prevNode = cur;
+                            frontier.update(found); //updates minNodeHeap
+                        }
                     }
                 }
 
@@ -79,11 +80,14 @@ int main(int argc, char const *argv[]) {
     Maze* maze1 = new Maze("./mazes/1-1-open-maze.txt");
     Maze* maze2 = new Maze("./mazes/1-1-open-maze.txt");
     Maze* maze3 = new Maze("./mazes/1-1-open-maze.txt");
+    Maze* maze4 = new Maze("./mazes/1-1-open-maze.txt");
     search(maze1, "DFS");
     maze1->printSolution();
     search(maze2, "BFS");
     maze2->printSolution();
     search(maze3, "greedy");
     maze3->printSolution();
+    search(maze4, "A*");
+    maze4->printSolution();
     return true;
 }
