@@ -18,6 +18,7 @@ struct FrontierNode{
 class Frontier {
 public:
     Frontier();
+    ~Frontier();
     void push_back(Node* node, Node* prevNode, int val=0, int cost = 0);
     void push_front(Node* node, Node* prevNode, int val=0, int cost=0);
     FrontierNode* pop_back(std::unordered_map<Node*, Node*>& history);

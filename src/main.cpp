@@ -64,6 +64,7 @@ void search(Maze* maze, string method){
 
             }
         }
+        delete curExploredNode;
     }
 
     //backtracking
@@ -89,5 +90,9 @@ int main(int argc, char const *argv[]) {
     maze3->printSolution();
     search(maze4, "A*");
     maze4->printSolution();
+    delete maze1;
+    delete maze2;
+    delete maze3;
+    delete maze4;
     return true;
 }

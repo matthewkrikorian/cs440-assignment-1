@@ -74,6 +74,18 @@ Maze::Maze(string filename){
 
 }
 
+Maze::~Maze(){
+    delete goals;
+    for(int i = 0; i < w; i++){
+        for(int j = 0; j < h; j++){
+            if(maze[i][j] != NULL)
+                delete maze[i][j];
+        }
+        delete[] maze[i];
+    }
+    delete[] maze;
+}
+
 Node* Maze::getStart(){
     return start;
 }

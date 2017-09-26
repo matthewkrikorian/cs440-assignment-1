@@ -7,6 +7,7 @@ class Node {
 
 public:
     Node(int x, int y);
+    ~Node();
     std::vector<Node*>* getNeighbors();
     void addNeighbor(Node*);
     bool isVisited();

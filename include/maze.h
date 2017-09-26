@@ -10,6 +10,7 @@ class Maze {
 
 public:
     Maze(std::string filename);
+    ~Maze();
     Node* getStart();
     std::vector<Node*>* getGoals();
     void printSolution();

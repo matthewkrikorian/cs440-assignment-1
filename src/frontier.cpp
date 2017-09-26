@@ -8,6 +8,14 @@ Frontier::Frontier(){
     size = 0;
 }
 
+Frontier::~Frontier(){
+    unordered_map<Node*, Node*> fakeHistory;
+    while(!empty()){
+        FrontierNode* cur = remove(getHead(), fakeHistory);
+        delete cur;
+    }
+}
+
 void Frontier::push_back(Node* node, Node* prevNode, int val, int cost){
     FrontierNode* fnode = new FrontierNode;
     fnode->node = node;

@@ -9,6 +9,10 @@ Node::Node(int x, int y){
     this->visited = false;
 }
 
+Node::~Node(){
+    delete neighbors;
+}
+
 vector<Node*>* Node::getNeighbors(){
     return this->neighbors;
 }
