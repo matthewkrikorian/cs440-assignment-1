@@ -34,6 +34,7 @@ void search(Maze* maze, string method){
             curExploredNode = frontier.pop_front(explored);
         }
         else if(method.compare("greedy") == 0 || method.compare("A*") == 0){
+            //Get the min on the frontier based on heuristic/heuristic+pathCost (depending on method)
             curExploredNode = frontier.pop_min(explored);
         }
 
@@ -51,7 +52,14 @@ void search(Maze* maze, string method){
                     // Must not be on frontier (unless cur has lower path cost to it)
                     FrontierNode* found = frontier.find(neighbor);
                     if(found == NULL) // can add to frontier
-                        frontier.push_back(neighbor, cur, manhattanDistance(neighbor, goal), curExploredNode->pathCost + 1);
+                        if(method.compare("A*") == 0){
+                            //Only update path cost for A* search
+                            frontier.push_back(neighbor, cur, manhattanDistance(neighbor, goal), curExploredNode->pathCost + 1);
+                        }
+                        else {
+                            //Keep 0 path cost for everything else
+                            frontier.push_back(neighbor, cur, manhattanDistance(neighbor, goal), 0);
+                        }
                     else {
                         // Update path costs if applicable
                         if( method.compare("A*") == 0 && found->pathCost > curExploredNode->pathCost + 1){
@@ -67,21 +75,25 @@ void search(Maze* maze, string method){
         delete curExploredNode;
     }
 
+    int sizeOfSolution = 0;
+
     //backtracking
     while(cur != NULL){
+        sizeOfSolution += 1;
         cur->visit();
         cur = explored[cur]; // go to previous
     }
 
     cout << explored.size() << " nodes explored during search.\n";
+    cout << sizeOfSolution << " nodes in solution.\n";
 
 }
 
 int main(int argc, char const *argv[]) {
-    Maze* maze1 = new Maze("./mazes/1-1-open-maze.txt");
-    Maze* maze2 = new Maze("./mazes/1-1-open-maze.txt");
-    Maze* maze3 = new Maze("./mazes/1-1-open-maze.txt");
-    Maze* maze4 = new Maze("./mazes/1-1-open-maze.txt");
+    Maze* maze1 = new Maze("./mazes/1-1-medium-maze.txt");
+    Maze* maze2 = new Maze("./mazes/1-1-medium-maze.txt");
+    Maze* maze3 = new Maze("./mazes/1-1-medium-maze.txt");
+    Maze* maze4 = new Maze("./mazes/1-1-medium-maze.txt");
     search(maze1, "DFS");
     maze1->printSolution();
     search(maze2, "BFS");
