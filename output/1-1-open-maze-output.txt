@@ -1,5 +1,6 @@
 Starting DFS search on ./mazes/1-1-open-maze.txt
 284 nodes explored during search.
+169 steps to reach goal.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %      ... ... ... ...%P ...        %
 %      . . . . . . . .%. . .        %
@@ -22,6 +23,7 @@ Starting DFS search on ./mazes/1-1-open-maze.txt
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Starting BFS search on ./mazes/1-1-open-maze.txt
 528 nodes explored during search.
+45 steps to reach goal.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                     %P.....       %
 %                     %     .       %
@@ -43,7 +45,8 @@ Starting BFS search on ./mazes/1-1-open-maze.txt
 %       ..%                         %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Starting greedy search on ./mazes/1-1-open-maze.txt
-228 nodes explored during search.
+151 nodes explored during search.
+45 steps to reach goal.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                     %P            %
 %                     %.            %
@@ -66,6 +69,7 @@ Starting greedy search on ./mazes/1-1-open-maze.txt
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Starting A* search on ./mazes/1-1-open-maze.txt
 238 nodes explored during search.
+45 steps to reach goal.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                     %P            %
 %                     %.            %

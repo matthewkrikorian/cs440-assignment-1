@@ -1,5 +1,6 @@
 Starting DFS search on ./mazes/1-1-medium-maze.txt
 448 nodes explored during search.
+288 steps to reach goal.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %......   % %.......    %.....%           %....       %    .%
 %.%%%%.%% % %.%%%%%.%%%%%.%%%.% %%%% %% %%%.%%.%% %%% % % %.%
@@ -25,6 +26,7 @@ Starting DFS search on ./mazes/1-1-medium-maze.txt
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Starting BFS search on ./mazes/1-1-medium-maze.txt
 610 nodes explored during search.
+94 steps to reach goal.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %         % %           %     %           %...........%.....%
 % %%%% %% % % %%%%% %%%%% %%% % %%%% %% %%%.%% %% %%%.%.% % %
@@ -49,7 +51,8 @@ Starting BFS search on ./mazes/1-1-medium-maze.txt
 %P..  %       %             %         %     %           %   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Starting greedy search on ./mazes/1-1-medium-maze.txt
-323 nodes explored during search.
+103 nodes explored during search.
+94 steps to reach goal.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %         % %           %     %     ....  %...........%.....%
 % %%%% %% % % %%%%% %%%%% %%% % %%%%.%%.%%%.%% %% %%%.%.% % %
@@ -75,6 +78,7 @@ Starting greedy search on ./mazes/1-1-medium-maze.txt
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Starting A* search on ./mazes/1-1-medium-maze.txt
 322 nodes explored during search.
+94 steps to reach goal.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %         % %           %     %     ....  %...........%.....%
 % %%%% %% % % %%%%% %%%%% %%% % %%%%.%%.%%%.%% %% %%%.%.% % %

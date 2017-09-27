@@ -73,9 +73,13 @@ void search(Maze* maze, string method){
             }
         }
         delete curExploredNode;
+        curExploredNode = NULL;
+    }
+    if(curExploredNode != NULL){
+        delete curExploredNode;
     }
 
-    int sizeOfSolution = 0;
+    int sizeOfSolution = -1;
 
     //backtracking
     while(cur != NULL){
@@ -85,15 +89,15 @@ void search(Maze* maze, string method){
     }
 
     cout << explored.size() << " nodes explored during search.\n";
-    cout << sizeOfSolution << " nodes in solution.\n";
+    cout << sizeOfSolution << " steps to reach goal.\n";
 
 }
 
 int main(int argc, char const *argv[]) {
-    Maze* maze1 = new Maze("./mazes/1-1-medium-maze.txt");
-    Maze* maze2 = new Maze("./mazes/1-1-medium-maze.txt");
-    Maze* maze3 = new Maze("./mazes/1-1-medium-maze.txt");
-    Maze* maze4 = new Maze("./mazes/1-1-medium-maze.txt");
+    Maze* maze1 = new Maze("./mazes/1-1-big-maze.txt");
+    Maze* maze2 = new Maze("./mazes/1-1-big-maze.txt");
+    Maze* maze3 = new Maze("./mazes/1-1-big-maze.txt");
+    Maze* maze4 = new Maze("./mazes/1-1-big-maze.txt");
     search(maze1, "DFS");
     maze1->printSolution();
     search(maze2, "BFS");
