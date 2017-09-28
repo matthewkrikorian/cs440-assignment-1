@@ -2,23 +2,12 @@
 
 using namespace std;
 
-Node::Node(int x, int y){
+Node::Node(int x, int y, int numDots, bool goal){
     this->x = x;
     this->y = y;
-    this->neighbors = new std::vector<Node*>();
+    this->numDots = numDots;
+    this->goal = goal;
     this->visited = false;
-}
-
-Node::~Node(){
-    delete neighbors;
-}
-
-vector<Node*>* Node::getNeighbors(){
-    return this->neighbors;
-}
-
-void Node::addNeighbor(Node* neighbor){
-    this->neighbors->push_back(neighbor);
 }
 
 bool Node::isVisited(){
@@ -29,11 +18,34 @@ void Node::visit(){
     this->visited = true;
 }
 
+bool Node::isGoal(){
+    return this->goal;
+}
+
 int Node::getX(){
     return x;
 }
 
-
 int Node::getY(){
     return y;
+}
+
+int Node::getDots(){
+    return numDots;
+}
+
+bool Node::hasVisited(Node* node){
+    return spacesVisited.find(node) != spacesVisited.end();
+}
+
+void Node::setVisited(Node* node){
+    spacesVisited.insert(node);
+}
+
+void Node::setSpacesVisited(unordered_set<Node*> otherSpacesVisited){
+    spacesVisited = otherSpacesVisited;
+}
+
+unordered_set<Node*> Node::getSpacesVisited(){
+    return spacesVisited;
 }

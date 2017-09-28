@@ -12,16 +12,18 @@ public:
     Maze(std::string filename);
     ~Maze();
     Node* getStart();
-    std::vector<Node*>* getGoals();
+    int getNumGoals();
     void printSolution();
     std::string getName();
+    bool isGoal(int x, int y);
+    std::vector<Node*> getNeighbors(Node* cur);
+    void visit(Node* curNode);
 
 private:
     std::string name;
     Node* start;
-    std::vector<Node*>* goals;
-    Node*** maze;
-    int w, h;
+    Node**** maze;
+    int w, h, numGoals;
 
 };
 

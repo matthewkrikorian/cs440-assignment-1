@@ -15,13 +15,14 @@ int manhattanDistance(Node* n1, Node* n2){
 void search(Maze* maze, string method){
     cout << "Starting " << method << " search on " << maze->getName() << '\n';
     Node* start = maze->getStart();
-    vector<Node*>* goals = maze->getGoals();
-    Node* goal = goals->front();
+
+    int goalDots = maze->getNumGoals();
+    cout << "Goal size: " << goalDots << "\n";
 
     unordered_map<Node*, Node*> explored;
 
     Frontier frontier;
-    frontier.push_back(start, NULL, manhattanDistance(start, goal), 0);
+    frontier.push_back(start, NULL, goalDots, 0); //assume start is not a dot since 'P' != '.'
 
     Node* cur = NULL;
     FrontierNode* curExploredNode = NULL;
@@ -39,14 +40,15 @@ void search(Maze* maze, string method){
         }
 
         cur = curExploredNode->node;
+        int curDots = cur->getDots();
 
         // Reached goal
-        if(cur == goal){
+        if(curDots == goalDots){
             break;
         }
         else {
             // For each neighbor
-            for(Node* neighbor : *(cur->getNeighbors())){
+            for(Node* neighbor : maze->getNeighbors(cur)){
                 // Must not be explored
                 if(explored.find(neighbor) == explored.end()){
                     // Must not be on frontier (unless cur has lower path cost to it)
@@ -54,16 +56,18 @@ void search(Maze* maze, string method){
                     if(found == NULL) // can add to frontier
                         if(method.compare("A*") == 0){
                             //Only update path cost for A* search
-                            frontier.push_back(neighbor, cur, manhattanDistance(neighbor, goal), curExploredNode->pathCost + 1);
+                            frontier.push_back(neighbor, cur, goalDots-neighbor->getDots(), curExploredNode->pathCost + 1);
                         }
                         else {
                             //Keep 0 path cost for everything else
-                            frontier.push_back(neighbor, cur, manhattanDistance(neighbor, goal), 0);
+                            frontier.push_back(neighbor, cur, goalDots-neighbor->getDots(), 0);
                         }
                     else {
                         // Update path costs if applicable
-                        if( method.compare("A*") == 0 && found->pathCost > curExploredNode->pathCost + 1){
+                        if( method.compare("A*") == 0 && found->pathCost > curExploredNode->pathCost + 1 ){
                             found->pathCost = curExploredNode->pathCost+1;
+                            found->node->setSpacesVisited(curExploredNode->node->getSpacesVisited());
+                            found->node->setVisited(found->node);
                             found->prevNode = cur;
                             frontier.update(found); //updates minNodeHeap
                         }
@@ -83,8 +87,9 @@ void search(Maze* maze, string method){
 
     //backtracking
     while(cur != NULL){
+        cout << cur->getX() << ", " << cur->getY() << "\n";
         sizeOfSolution += 1;
-        cur->visit();
+        maze->visit(cur);
         cur = explored[cur]; // go to previous
     }
 
@@ -94,21 +99,21 @@ void search(Maze* maze, string method){
 }
 
 int main(int argc, char const *argv[]) {
-    Maze* maze1 = new Maze("./mazes/1-1-big-maze.txt");
-    Maze* maze2 = new Maze("./mazes/1-1-big-maze.txt");
-    Maze* maze3 = new Maze("./mazes/1-1-big-maze.txt");
-    Maze* maze4 = new Maze("./mazes/1-1-big-maze.txt");
-    search(maze1, "DFS");
-    maze1->printSolution();
+    // Maze* maze1 = new Maze("./mazes/1-1-big-maze.txt");
+    Maze* maze2 = new Maze("./mazes/1-2-tiny-search.txt");
+    // Maze* maze3 = new Maze("./mazes/1-1-big-maze.txt");
+    // Maze* maze4 = new Maze("./mazes/1-2-tiny-search.txt");
+    // search(maze1, "DFS");
+    // maze1->printSolution();
     search(maze2, "BFS");
     maze2->printSolution();
-    search(maze3, "greedy");
-    maze3->printSolution();
-    search(maze4, "A*");
-    maze4->printSolution();
-    delete maze1;
+    // search(maze3, "greedy");
+    // maze3->printSolution();
+    // search(maze4, "A*");
+    // maze4->printSolution();
+    // delete maze1;
     delete maze2;
-    delete maze3;
-    delete maze4;
+    // delete maze3;
+    // delete maze4;
     return true;
 }
