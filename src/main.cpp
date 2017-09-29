@@ -40,7 +40,12 @@ void search(Maze* maze, string method){
         }
 
         cur = curExploredNode->node;
-        int curDots = cur->getDots();
+        int curDots = cur->getDots(); //get updated # of dots
+        int hash = cur->getDotsTakenHash();
+        if(cur->isGoal() && !cur->hasTaken(cur->getDotId())){ //Check if explored node has dot
+            curDots += 1;
+            hash += (1 << cur->getDotId());
+        }
 
         // Reached goal
         if(curDots == goalDots){
@@ -48,26 +53,27 @@ void search(Maze* maze, string method){
         }
         else {
             // For each neighbor
-            for(Node* neighbor : maze->getNeighbors(cur)){
+            cout <<" start "<< cur->getX() << ", " << cur->getY() << " / " << cur->getDots() << " dots\n";
+            for(Node* neighbor : maze->getNeighbors(cur, curDots, hash)){
+                cout << neighbor << ": " << neighbor->getX() << ", " << neighbor->getY() << " / " << neighbor->getDots() << " dots\n";
                 // Must not be explored
                 if(explored.find(neighbor) == explored.end()){
                     // Must not be on frontier (unless cur has lower path cost to it)
                     FrontierNode* found = frontier.find(neighbor);
-                    if(found == NULL) // can add to frontier
+                    if(found == NULL){ // can add to frontier
                         if(method.compare("A*") == 0){
                             //Only update path cost for A* search
-                            frontier.push_back(neighbor, cur, goalDots-neighbor->getDots(), curExploredNode->pathCost + 1);
+                            frontier.push_back(neighbor, cur, goalDots - neighbor->getDots(), curExploredNode->pathCost + 1);
                         }
                         else {
                             //Keep 0 path cost for everything else
-                            frontier.push_back(neighbor, cur, goalDots-neighbor->getDots(), 0);
+                            frontier.push_back(neighbor, cur, goalDots - neighbor->getDots(), 0);
                         }
+                    }
                     else {
                         // Update path costs if applicable
                         if( method.compare("A*") == 0 && found->pathCost > curExploredNode->pathCost + 1 ){
                             found->pathCost = curExploredNode->pathCost+1;
-                            found->node->setSpacesVisited(curExploredNode->node->getSpacesVisited());
-                            found->node->setVisited(found->node);
                             found->prevNode = cur;
                             frontier.update(found); //updates minNodeHeap
                         }

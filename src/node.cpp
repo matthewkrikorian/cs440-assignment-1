@@ -2,11 +2,12 @@
 
 using namespace std;
 
-Node::Node(int x, int y, int numDots, bool goal){
+Node::Node(int x, int y, int numDots, int dotsHash, int dotId){
     this->x = x;
     this->y = y;
+    this->dotId = dotId;
     this->numDots = numDots;
-    this->goal = goal;
+    this->dotsHash = dotsHash;
     this->visited = false;
 }
 
@@ -19,7 +20,7 @@ void Node::visit(){
 }
 
 bool Node::isGoal(){
-    return this->goal;
+    return this->dotId != -1;
 }
 
 int Node::getX(){
@@ -34,18 +35,21 @@ int Node::getDots(){
     return numDots;
 }
 
-bool Node::hasVisited(Node* node){
-    return spacesVisited.find(node) != spacesVisited.end();
+int Node::getDotId(){
+    return dotId;
 }
 
-void Node::setVisited(Node* node){
-    spacesVisited.insert(node);
+void Node::setTaken(int dotNumber){
+    if(dotId == -1) return;
+    this->dotsHash += 1 << dotNumber; //bit shifting for fast powers of 2
+    this->numDots += 1;
 }
 
-void Node::setSpacesVisited(unordered_set<Node*> otherSpacesVisited){
-    spacesVisited = otherSpacesVisited;
+bool Node::hasTaken(int dotNumber){
+    if(dotId == -1) return false;
+    return this->dotsHash & (1 << dotNumber); //bit shifting for fast powers of 2
 }
 
-unordered_set<Node*> Node::getSpacesVisited(){
-    return spacesVisited;
+int Node::getDotsTakenHash(){
+    return this->dotsHash;
 }

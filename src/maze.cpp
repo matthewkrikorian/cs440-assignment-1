@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <utility>
+
 using namespace std;
 
 Maze::Maze(string filename){
@@ -27,11 +29,11 @@ Maze::Maze(string filename){
     }
 
     //Allocate 2d array to hold contents of file
-    maze = new Node***[w];
+    maze = new unordered_map<int, Node*>***[w];
     for(int i = 0; i < w; i++){
-        maze[i] = new Node**[h];
+        maze[i] = new unordered_map<int, Node*>**[h];
         for(int j = 0; j < h ; j++){
-            maze[i][j] = new Node*[numGoals];
+            maze[i][j] = new unordered_map<int, Node*>*[numGoals];
         }
     }
 
@@ -41,20 +43,30 @@ Maze::Maze(string filename){
 
     // Populate the maze array, record locations of start and goals
     int y = 0;
+    int goalNum = 0;
     while(getline(input, temp)){
         for(int x = 0; x < w; x++){
             //Don't create nodes for walls
             if(temp[x] != '%'){
-                maze[x][y][0] = new Node(x, y, 0, temp[x] == '.');
-            }
-            else
-                maze[x][y][0] = NULL;
+                maze[x][y][0] = new unordered_map<int, Node*>;
+                if (temp[x] == '.') {
+                    maze[x][y][0]->operator[](0) = new Node(x, y, 0, 0, goalNum++); //map all to 0 dots collected to begin
+                }
+                else {
+                    maze[x][y][0]->operator[](0) = new Node(x, y, 0, 0); //map all to 0 dots collected to begin
+                }
 
-            if(temp[x] == 'P')
-                start = maze[x][y][0];
-            for(int i = 1; i < numGoals; i++){
-                maze[x][y][i] = NULL;
+                for(int i = 1; i < numGoals; i++){
+                    maze[x][y][i] = new unordered_map<int, Node*>;
+                }
             }
+            else {
+                for(int i = 0; i < numGoals; i++){
+                    maze[x][y][i] = NULL;
+                }
+            }
+            if(temp[x] == 'P')
+                start = maze[x][y][0]->at(0);
         }
         y++;
     }
@@ -62,50 +74,37 @@ Maze::Maze(string filename){
 }
 
 
-vector<Node*> Maze::getNeighbors(Node* cur){
+vector<Node*> Maze::getNeighbors(Node* cur, int dots, int hash){
     int x = cur->getX();
     int y = cur->getY();
-    int dots = cur->getDots();
     vector<Node*> neighbors;
 
-    if(x+1 < w && maze[x+1][y][0] != NULL && !cur->hasVisited(maze[x+1][y][0])){ //not a wall
-        int numDots = dots + maze[x+1][y][0]->isGoal();
-        if(maze[x+1][y][numDots] == NULL){ //does this state exist yet?
-            maze[x+1][y][numDots] = new Node(x+1, y, numDots, false);
-            maze[x+1][y][numDots]->setSpacesVisited(cur->getSpacesVisited());
-            maze[x+1][y][numDots]->setVisited(maze[x+1][y][0]);
+    if(x+1 < w && maze[x+1][y][0] != NULL){ //not a wall
+        if(maze[x+1][y][dots]->find(hash) == maze[x+1][y][dots]->end()){ //does this state exist yet?
+            maze[x+1][y][dots]->operator[](hash) = new Node(x+1, y, dots, hash, maze[x+1][y][0]->at(0)->getDotId());
         }
-        neighbors.push_back(maze[x+1][y][numDots]);
+        neighbors.push_back(maze[x+1][y][dots]->at(hash));
     }
 
-    if(x-1 >= 0 && maze[x-1][y][0] != NULL && !cur->hasVisited(maze[x-1][y][0])){ //not a wall and unvisited
-        int numDots = dots + maze[x-1][y][0]->isGoal();
-        if(maze[x-1][y][numDots] == NULL){ //does this state exist yet?
-            maze[x-1][y][numDots] = new Node(x-1, y, numDots, false); //create it
-            maze[x-1][y][numDots]->setSpacesVisited(cur->getSpacesVisited()); //set spaces visited up til this space
-            maze[x-1][y][numDots]->setVisited(maze[x-1][y][0]); //add self
+    if(x-1 >= 0 && maze[x-1][y][0] != NULL){ //not a wall//not a wall
+        if(maze[x-1][y][dots]->find(hash) == maze[x-1][y][dots]->end()){ //does this state exist yet?
+            maze[x-1][y][dots]->operator[](hash) = new Node(x-1, y, dots, hash, maze[x-1][y][0]->at(0)->getDotId());
         }
-        neighbors.push_back(maze[x+1][y][numDots]);
+        neighbors.push_back(maze[x-1][y][dots]->at(hash));
     }
 
-    if(y+1 < h && maze[x][y+1][0] != NULL && !cur->hasVisited(maze[x][y+1][0])){//not a wall and unvisited
-        int numDots = dots + maze[x][y+1][0]->isGoal();
-        if(maze[x][y+1][numDots] == NULL){ //does this state exist yet?
-            maze[x][y+1][numDots] = new Node(x, y+1, numDots, false); //create it
-            maze[x][y+1][numDots]->setSpacesVisited(cur->getSpacesVisited()); //set spaces visited up til this space
-            maze[x][y+1][numDots]->setVisited(maze[x][y+1][0]); //add self
+    if(y+1 < w && maze[x][y+1][0] != NULL){ //not a wall
+        if(maze[x][y+1][dots]->find(hash) == maze[x][y+1][dots]->end()){ //does this state exist yet?
+            maze[x][y+1][dots]->operator[](hash) = new Node(x, y+1, dots, hash, maze[x][y+1][0]->at(0)->getDotId());
         }
-        neighbors.push_back(maze[x][y+1][numDots]);
+        neighbors.push_back(maze[x][y+1][dots]->at(hash));
     }
 
-    if(y-1 >= 0 && maze[x][y-1][0] != NULL && !cur->hasVisited(maze[x][y-1][0])){//not a wall and unvisited
-        int numDots = dots + maze[x][y-1][0]->isGoal();
-        if(maze[x][y-1][numDots] == NULL){ //does this state exist yet?
-            maze[x][y-1][numDots] = new Node(x, y-1, numDots, false); //create it
-            maze[x][y-1][numDots]->setSpacesVisited(cur->getSpacesVisited()); //set spaces visited up til this space
-            maze[x][y-1][numDots]->setVisited(maze[x][y-1][0]); //add self
+    if(y-1 >= 0 && maze[x][y-1][0] != NULL){ //not a wall//not a wall
+        if(maze[x][y-1][dots]->find(hash) == maze[x][y-1][dots]->end()){ //does this state exist yet?
+            maze[x][y-1][dots]->operator[](hash) = new Node(x, y-1, dots, hash, maze[x][y-1][0]->at(0)->getDotId());
         }
-        neighbors.push_back(maze[x][y-1][numDots]);
+        neighbors.push_back(maze[x][y-1][dots]->at(hash));
     }
 
     return neighbors;
@@ -115,8 +114,15 @@ Maze::~Maze(){
     for(int i = 0; i < w; i++){
         for(int j = 0; j < h; j++){
             for(int k = 0; k < numGoals; k++){
-                if(maze[i][j][k] != NULL)
-                    delete maze[i][j][k];
+                if(maze[i][j][k] != NULL){
+                    for (pair<const int, Node *> intNodePair : *maze[i][j][k]) {
+                        delete get<1>(intNodePair);
+                    }
+                }
+                else {
+                    continue;
+                }
+                delete maze[i][j][k];
             }
             delete[] maze[i][j];
         }
@@ -129,10 +135,6 @@ Node* Maze::getStart(){
     return start;
 }
 
-bool Maze::isGoal(int x, int y){
-    return maze[x][y][0]->isGoal();
-}
-
 int Maze::getNumGoals(){
     return numGoals;
 }
@@ -140,7 +142,7 @@ int Maze::getNumGoals(){
 void Maze::visit(Node* curNode){
     int x = curNode->getX();
     int y = curNode->getY();
-    maze[x][y][0]->visit();
+    maze[x][y][0]->at(0)->visit();
 }
 
 void Maze::printSolution(){
@@ -149,10 +151,10 @@ void Maze::printSolution(){
             if(maze[j][i][0] == NULL){
                 cout << '%';
             }
-            else if(maze[j][i][0] == start){
+            else if(maze[j][i][0]->at(0) == start){
                 cout << 'P';
             }
-            else if(maze[j][i][0]->isVisited()){
+            else if(maze[j][i][0]->at(0)->isVisited()){
                 cout << '.';
             }
             else {

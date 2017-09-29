@@ -4,6 +4,7 @@
 #include "node.h"
 
 #include <vector>
+#include <unordered_map>
 #include <string>
 
 class Maze {
@@ -15,14 +16,13 @@ public:
     int getNumGoals();
     void printSolution();
     std::string getName();
-    bool isGoal(int x, int y);
-    std::vector<Node*> getNeighbors(Node* cur);
+    std::vector<Node*> getNeighbors(Node* cur, int numDots, int hash);
     void visit(Node* curNode);
 
 private:
     std::string name;
     Node* start;
-    Node**** maze;
+    std::unordered_map<int, Node*>**** maze;
     int w, h, numGoals;
 
 };
