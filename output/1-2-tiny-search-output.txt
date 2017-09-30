@@ -1,0 +1,26 @@
+Starting BFS search on ./mazes/1-2-tiny-search.txt
+Goal size: 12
+56859 nodes explored during search.
+36 steps to reach goal.
+%%%%%%%%%%
+%8  % 5  %
+% %7% %% %
+% %   6%4%
+% 9%P%   %
+%a  1  2 %
+% %%%% % %
+%b c   %3%
+%%%%%%%%%%
+Starting A* search on ./mazes/1-2-tiny-search.txt
+Goal size: 12
+43774 nodes explored during search.
+36 steps to reach goal.
+%%%%%%%%%%
+%8  % 5  %
+% %7% %% %
+% %   6%4%
+% 9%P%   %
+%a  1  2 %
+% %%%% % %
+%b c   %3%
+%%%%%%%%%%

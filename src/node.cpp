@@ -2,13 +2,26 @@
 
 using namespace std;
 
-Node::Node(int x, int y, int numDots, int dotsHash, int dotId){
+static const unsigned char symbolArray[] = {'0', '1', '2', '3', '4', '5', '6',
+                                            '7', '8', '9', 'a', 'b', 'c', 'd',
+                                            'e', 'f', 'g', 'h', 'i', 'j', 'k',
+                                            'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                                            's', 't', 'u', 'v', 'w', 'x', 'y',
+                                            'z', 'A', 'B', 'C', 'D', 'E', 'F',
+                                            'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                                            'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+                                            'U', 'V', 'W', 'X', 'Y', 'Z'};
+const unsigned char* Node::symbols = symbolArray;
+
+Node::Node(int x, int y, int numDots, uint32_t dotsHash, int dotId){
     this->x = x;
     this->y = y;
     this->dotId = dotId;
     this->numDots = numDots;
     this->dotsHash = dotsHash;
     this->visited = false;
+    this->symbol = '*';
+    this->notSet = true;
 }
 
 bool Node::isVisited(){
@@ -50,6 +63,21 @@ bool Node::hasTaken(int dotNumber){
     return this->dotsHash & (1 << dotNumber); //bit shifting for fast powers of 2
 }
 
-int Node::getDotsTakenHash(){
+uint32_t Node::getDotsTakenHash(){
     return this->dotsHash;
+}
+
+void Node::setSymbol(int place){
+    if(notSet) {
+        this->symbol = symbols[place];
+        notSet = false;
+    }
+}
+
+bool Node::canSet(){
+    return notSet;
+}
+
+char Node::getSymbol(){
+    return this->symbol;
 }

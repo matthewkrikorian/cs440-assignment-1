@@ -6,9 +6,10 @@
 
 using namespace std;
 
-Maze::Maze(string filename){
+Maze::Maze(string filename, string version){
     ifstream input(filename);
-    name = filename;
+    this->name = filename;
+    this->version = version;
 
     w = 0;
     h = 0;
@@ -29,11 +30,11 @@ Maze::Maze(string filename){
     }
 
     //Allocate 2d array to hold contents of file
-    maze = new unordered_map<int, Node*>***[w];
+    maze = new unordered_map<uint32_t, Node*>***[w];
     for(int i = 0; i < w; i++){
-        maze[i] = new unordered_map<int, Node*>**[h];
+        maze[i] = new unordered_map<uint32_t, Node*>**[h];
         for(int j = 0; j < h ; j++){
-            maze[i][j] = new unordered_map<int, Node*>*[numGoals];
+            maze[i][j] = new unordered_map<uint32_t, Node*>*[numGoals];
         }
     }
 
@@ -48,16 +49,17 @@ Maze::Maze(string filename){
         for(int x = 0; x < w; x++){
             //Don't create nodes for walls
             if(temp[x] != '%'){
-                maze[x][y][0] = new unordered_map<int, Node*>;
+                maze[x][y][0] = new unordered_map<uint32_t, Node*>;
                 if (temp[x] == '.') {
                     maze[x][y][0]->operator[](0) = new Node(x, y, 0, 0, goalNum++); //map all to 0 dots collected to begin
+                    goals.push_back(maze[x][y][0]->at(0));
                 }
                 else {
                     maze[x][y][0]->operator[](0) = new Node(x, y, 0, 0); //map all to 0 dots collected to begin
                 }
 
                 for(int i = 1; i < numGoals; i++){
-                    maze[x][y][i] = new unordered_map<int, Node*>;
+                    maze[x][y][i] = new unordered_map<uint32_t, Node*>;
                 }
             }
             else {
@@ -74,7 +76,7 @@ Maze::Maze(string filename){
 }
 
 
-vector<Node*> Maze::getNeighbors(Node* cur, int dots, int hash){
+vector<Node*> Maze::getNeighbors(Node* cur, int dots, uint32_t hash){
     int x = cur->getX();
     int y = cur->getY();
     vector<Node*> neighbors;
@@ -134,6 +136,9 @@ Maze::~Maze(){
 Node* Maze::getStart(){
     return start;
 }
+vector<Node*> Maze::getGoals(){
+    return goals;
+}
 
 int Maze::getNumGoals(){
     return numGoals;
@@ -145,26 +150,63 @@ void Maze::visit(Node* curNode){
     maze[x][y][0]->at(0)->visit();
 }
 
+bool Maze::canSetSymbol(Node* curNode){
+    int x = curNode->getX();
+    int y = curNode->getY();
+    return maze[x][y][0]->at(0)->canSet();
+}
+
+void Maze::setSymbol(Node* curNode, int place){
+    int x = curNode->getX();
+    int y = curNode->getY();
+    maze[x][y][0]->at(0)->setSymbol(place);
+}
+
 void Maze::printSolution(){
-    for(int i = 0; i < h; i++){
-        for(int j = 0; j < w; j++){
-            if(maze[j][i][0] == NULL){
-                cout << '%';
+    if(version.compare("1.2") == 0){
+            for(int i = 0; i < h; i++){
+                for(int j = 0; j < w; j++){
+                    if(maze[j][i][0] == NULL){
+                        cout << '%';
+                    }
+                    else if(maze[j][i][0]->at(0) == start){
+                        cout << 'P';
+                    }
+                    else if(maze[j][i][0]->at(0)->isGoal()){
+                        cout << maze[j][i][0]->at(0)->getSymbol();
+                    }
+                    else {
+                        cout << ' ';
+                    }
+                }
+                cout << '\n';
             }
-            else if(maze[j][i][0]->at(0) == start){
-                cout << 'P';
+    }
+    else if (version.compare("1.1") == 0){
+        for(int i = 0; i < h; i++){
+            for(int j = 0; j < w; j++){
+                if(maze[j][i][0] == NULL){
+                    cout << '%';
+                }
+                else if(maze[j][i][0]->at(0) == start){
+                    cout << 'P';
+                }
+                else if(maze[j][i][0]->at(0)->isVisited()){
+                    cout << '.';
+                }
+                else {
+                    cout << ' ';
+                }
             }
-            else if(maze[j][i][0]->at(0)->isVisited()){
-                cout << '.';
-            }
-            else {
-                cout << ' ';
-            }
+            cout << '\n';
         }
-        cout << '\n';
     }
 }
 
 string Maze::getName(){
     return name;
+}
+
+string Maze::getVersion(){
+    return version;
 }
