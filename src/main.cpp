@@ -1,6 +1,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <stdlib.h>
+#include <limits.h>
 
 #include "maze.h"
 #include "node.h"
@@ -13,23 +14,56 @@ unordered_map<uint32_t, int> memo;
 
 int getMSTLength(Node* n, vector<Node*> goals){
     uint32_t hash = n->getDotsTakenHash();
+    uint32_t tempHash = hash;
+    int numDots = goals.size();
     if(memo.find(hash) != memo.end()){
         //do nothing
     }
-    else {
-        uint32_t tempHash = hash;
+    else { //make the mst and compute sum of edges
         vector<Node*> dots;
-        for(int i = 0; i < goals.size(); i++){
+        for(int i = 0; i < numDots; i++){
             if(!(tempHash & 1)){
                 dots.push_back(goals[i]);
             }
             tempHash = tempHash >> 1;
         }
-        MST mst(dots);
+        MST mst(dots, numDots);
         memo[hash] = mst.getTotalCost();
     }
-    return memo[hash];
+    if(tempHash == 0){
+        tempHash = hash;
+    }
+    //Compute min dist from cur node to dots remaining
+    int minDist = INT_MAX;
+    for(int i = 0; i< numDots; i++){
+        if(!(tempHash & 1)){
+            int dist = MST::manhattanDistance(n, goals[i]);
+            if(dist < minDist){
+                minDist = dist;
+            }
+        }
+        tempHash = tempHash >> 1;
+    }
+    return memo[hash] + minDist;
 
+}
+
+int getNearestNeighborDistance(Node* n, vector<Node*> goals){
+    uint32_t hash = n->getDotsTakenHash();
+    uint32_t tempHash = hash;
+    int numDots = goals.size();
+    //Compute min dist from cur node to dots remaining
+    int minDist = INT_MAX;
+    for(int i = 0; i< numDots; i++){
+        if(!(tempHash & 1)){
+            int dist = MST::manhattanDistance(n, goals[i]);
+            if(dist < minDist){
+                minDist = dist;
+            }
+        }
+        tempHash = tempHash >> 1;
+    }
+    return minDist;
 }
 
 void search(Maze* maze, string method){
@@ -37,7 +71,6 @@ void search(Maze* maze, string method){
     Node* start = maze->getStart();
     vector<Node*> goals = maze->getGoals();
     Node* goal = goals[0];
-    cout << getMSTLength(start, goals) << " length of MST \n";
 
     int goalDots = maze->getNumGoals();
     cout << "Goal size: " << goalDots << "\n";
@@ -57,7 +90,7 @@ void search(Maze* maze, string method){
         else if(method.compare("BFS") == 0){
             curExploredNode = frontier.pop_front(explored);
         }
-        else if(method.compare("greedy") == 0 || method.compare("A*") == 0){
+        else if(method.compare("greedy") == 0 || method.compare(0, 2, "A*") == 0){
             //Get the min on the frontier based on heuristic/heuristic+pathCost (depending on method)
             curExploredNode = frontier.pop_min(explored);
         }
@@ -91,6 +124,14 @@ void search(Maze* maze, string method){
                                 frontier.push_back(neighbor, cur, getMSTLength(neighbor, goals), curExploredNode->pathCost + 1);
                             }
                         }
+                        else if(method.compare(0, 2, "A*") == 0){
+                            if(maze->getVersion().compare("1.1")==0){
+                                frontier.push_back(neighbor, cur, MST::manhattanDistance(neighbor, goal), curExploredNode->pathCost + 1);
+                            }
+                            else {
+                                frontier.push_back(neighbor, cur, getNearestNeighborDistance(neighbor, goals), curExploredNode->pathCost + 1);
+                            }
+                        }
                         else {
                             //Keep 0 path cost for everything else
                             if(maze->getVersion().compare("1.1")==0){
@@ -103,7 +144,7 @@ void search(Maze* maze, string method){
                     }
                     else {
                         // Update path costs if applicable
-                        if( method.compare("A*") == 0 && found->pathCost > curExploredNode->pathCost + 1 ){
+                        if( method.compare(0, 2, "A*") == 0 && found->pathCost > curExploredNode->pathCost + 1 ){
                             found->pathCost = curExploredNode->pathCost+1;
                             found->prevNode = cur;
                             frontier.update(found); //updates minNodeHeap
@@ -144,21 +185,42 @@ void search(Maze* maze, string method){
 }
 
 int main(int argc, char const *argv[]) {
-    // Maze* maze1 = new Maze("./mazes/1-1-big-maze.txt");
-    Maze* maze2 = new Maze("./mazes/1-2-tiny-search.txt", "1.2");
-    // Maze* maze3 = new Maze("./mazes/1-1-big-maze.txt");
-    Maze* maze4 = new Maze("./mazes/1-2-tiny-search.txt", "1.2");
+    /*******************************************************
+    MP 1.1 - Uncomment to run
+    *******************************************************/
+    // Maze* maze1 = new Maze("./mazes/1-1-big-maze.txt", "1.1");
+    // Maze* maze2 = new Maze("./mazes/1-1-big-maze.txt", "1.1");
+    // Maze* maze3 = new Maze("./mazes/1-1-big-maze.txt", "1.1");
+    // Maze* maze4 = new Maze("./mazes/1-1-big-maze.txt", "1.1");
+    //
     // search(maze1, "DFS");
     // maze1->printSolution();
-    search(maze2, "BFS");
-    maze2->printSolution();
+    // search(maze2, "BFS");
+    // maze2->printSolution();
     // search(maze3, "greedy");
     // maze3->printSolution();
-    search(maze4, "A*");
-    maze4->printSolution();
+    // search(maze4, "A*");
+    // maze4->printSolution();
+    //
     // delete maze1;
-    delete maze2;
+    // delete maze2;
     // delete maze3;
-    delete maze4;
+    // delete maze4;
+
+    /*******************************************************
+    MP 1.2 - Uncomment to run
+    *******************************************************/
+
+    Maze* maze1 = new Maze("./mazes/1-2-small-search.txt", "1.2");
+    Maze* maze2 = new Maze("./mazes/1-2-small-search.txt", "1.2");
+
+    search(maze1, "BFS");
+    maze1->printSolution();
+    search(maze2, "A*");
+    maze2->printSolution();
+
+    delete maze1;
+    delete maze2;
+
     return true;
 }

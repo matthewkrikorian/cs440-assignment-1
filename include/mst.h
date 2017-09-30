@@ -14,7 +14,7 @@ struct Edge{
 
 class MST {
 public:
-    MST(const std::vector<Node*>& goals);
+    MST(const std::vector<Node*>& goals, int numDots);
     int getTotalCost();
     static int manhattanDistance(Node* n1, Node* n2);
 

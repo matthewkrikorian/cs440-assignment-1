@@ -17,7 +17,7 @@ Goal size: 15
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Starting A* search on ./mazes/1-2-small-search.txt
 Goal size: 15
-4566159 nodes explored during search.
+2116049 nodes explored during search.
 143 steps to reach goal.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %      P      1%      5  6   %

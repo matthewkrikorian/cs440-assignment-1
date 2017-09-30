@@ -40,7 +40,14 @@ private:
     struct compare{
         bool operator()(const FrontierNode l, const FrontierNode r)
         {
-           return l.heuristic + l.pathCost > r.heuristic + r.pathCost;
+            int left = l.heuristic + l.pathCost;
+            int right = r.heuristic + r.pathCost;
+            if(left == right){
+                return l.pathCost > r.pathCost;
+            }
+            else{
+                return left > right;
+            }
         }
     };
     std::priority_queue<FrontierNode, std::vector<FrontierNode>, compare> minNodeHeap;

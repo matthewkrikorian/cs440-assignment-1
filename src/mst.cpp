@@ -6,17 +6,16 @@ int MST::manhattanDistance(Node* n1, Node* n2){
     return abs(n1->getX() - n2->getX()) + abs(n1->getY() - n2->getY());
 }
 
-MST::MST(const vector<Node*>& goals){
+MST::MST(const vector<Node*>& goals, int numDots){
     numGoals = goals.size();
     totalCost = 0;
     if(numGoals == 1){
         return;
     }
-    dsets.addelements(numGoals);
+    dsets.addelements(numDots);
 
     for(int i = 0; i < numGoals; i++){
         for(int j = i+1; j < numGoals; j++){
-            if(i == j) continue;
             Edge* edge = new Edge;
             edge->v1 = goals[i];
             edge->v2 = goals[j];
@@ -35,6 +34,12 @@ MST::MST(const vector<Node*>& goals){
             curVertices.insert(minEdge->v1->getDotId());
             curVertices.insert(minEdge->v2->getDotId());
         }
+        delete minEdge;
+    }
+    while(!minEdgeHeap.empty()){
+        Edge* minEdge = minEdgeHeap.top();
+        minEdgeHeap.pop();
+        delete minEdge;
     }
 }
 
