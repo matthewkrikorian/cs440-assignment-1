@@ -12,6 +12,25 @@ using namespace std;
 
 unordered_map<uint32_t, int> memo;
 
+
+int getNearestNeighborDistance(Node* n, vector<Node*> goals){
+    uint32_t hash = n->getDotsTakenHash();
+    uint32_t tempHash = hash;
+    int numDots = goals.size();
+    //Compute min dist from cur node to dots remaining
+    int minDist = INT_MAX;
+    for(int i = 0; i< numDots; i++){
+        if(!(tempHash & 1)){
+            int dist = MST::manhattanDistance(n, goals[i]);
+            if(dist < minDist){
+                minDist = dist;
+            }
+        }
+        tempHash = tempHash >> 1;
+    }
+    return minDist;
+}
+
 int getMSTLength(Node* n, vector<Node*> goals){
     uint32_t hash = n->getDotsTakenHash();
     uint32_t tempHash = hash;
@@ -30,40 +49,8 @@ int getMSTLength(Node* n, vector<Node*> goals){
         MST mst(dots, numDots);
         memo[hash] = mst.getTotalCost();
     }
-    if(tempHash == 0){
-        tempHash = hash;
-    }
-    //Compute min dist from cur node to dots remaining
-    int minDist = INT_MAX;
-    for(int i = 0; i< numDots; i++){
-        if(!(tempHash & 1)){
-            int dist = MST::manhattanDistance(n, goals[i]);
-            if(dist < minDist){
-                minDist = dist;
-            }
-        }
-        tempHash = tempHash >> 1;
-    }
-    return memo[hash] + minDist;
+    return memo[hash] + getNearestNeighborDistance(n, goals);
 
-}
-
-int getNearestNeighborDistance(Node* n, vector<Node*> goals){
-    uint32_t hash = n->getDotsTakenHash();
-    uint32_t tempHash = hash;
-    int numDots = goals.size();
-    //Compute min dist from cur node to dots remaining
-    int minDist = INT_MAX;
-    for(int i = 0; i< numDots; i++){
-        if(!(tempHash & 1)){
-            int dist = MST::manhattanDistance(n, goals[i]);
-            if(dist < minDist){
-                minDist = dist;
-            }
-        }
-        tempHash = tempHash >> 1;
-    }
-    return minDist;
 }
 
 void search(Maze* maze, string method){
@@ -124,7 +111,7 @@ void search(Maze* maze, string method){
                                 frontier.push_back(neighbor, cur, getMSTLength(neighbor, goals), curExploredNode->pathCost + 1);
                             }
                         }
-                        else if(method.compare(0, 2, "A*") == 0){
+                        else if(method.compare(0, 2, "A*") == 0){ //suboptimal search
                             if(maze->getVersion().compare("1.1")==0){
                                 frontier.push_back(neighbor, cur, MST::manhattanDistance(neighbor, goal), curExploredNode->pathCost + 1);
                             }
@@ -186,7 +173,7 @@ void search(Maze* maze, string method){
 
 int main(int argc, char const *argv[]) {
     /*******************************************************
-    MP 1.1 - Uncomment to run
+    MP 1.1 - Uncomment below to run
     *******************************************************/
     // Maze* maze1 = new Maze("./mazes/1-1-big-maze.txt", "1.1");
     // Maze* maze2 = new Maze("./mazes/1-1-big-maze.txt", "1.1");
@@ -208,19 +195,45 @@ int main(int argc, char const *argv[]) {
     // delete maze4;
 
     /*******************************************************
-    MP 1.2 - Uncomment to run
+    MP 1.2 - Uncomment below to run
     *******************************************************/
 
-    Maze* maze1 = new Maze("./mazes/1-2-small-search.txt", "1.2");
-    Maze* maze2 = new Maze("./mazes/1-2-small-search.txt", "1.2");
+    // Maze* maze1 = new Maze("./mazes/1-2-tiny-search.txt", "1.2");
+    // Maze* maze2 = new Maze("./mazes/1-2-tiny-search.txt", "1.2");
 
-    search(maze1, "BFS");
-    maze1->printSolution();
-    search(maze2, "A*");
-    maze2->printSolution();
+    // search(maze1, "BFS");
+    // maze1->printSolution();
+    // search(maze2, "A*");
+    // maze2->printSolution();
 
-    delete maze1;
-    delete maze2;
+    // delete maze1;
+    // delete maze2;
+
+
+    /*******************************************************
+    MP 1.2 suboptimal tests - Uncomment below to run
+    *******************************************************/
+
+    // Maze* maze1 = new Maze("./mazes/1-2-tiny-search.txt", "1.2");
+    // Maze* maze2 = new Maze("./mazes/1-2-tiny-search.txt", "1.2");
+    //
+    // search(maze1, "BFS");
+    // maze1->printSolution();
+    // search(maze2, "A*suboptimal");
+    // maze2->printSolution();
+    //
+    // delete maze1;
+    // delete maze2;
+
+    /*******************************************************
+    MP 1ExtraCredit- Uncomment below to run
+    *******************************************************/
+
+    // Maze* maze1 = new Maze("./mazes/bigDots.txt", "1.1");
+    // search(maze1, "A*suboptimal");
+    // maze1->printSolution();
+    // delete maze1;
+
 
     return true;
 }
