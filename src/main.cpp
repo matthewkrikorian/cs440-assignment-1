@@ -198,16 +198,16 @@ int main(int argc, char const *argv[]) {
     MP 1.2 - Uncomment below to run
     *******************************************************/
 
-    // Maze* maze1 = new Maze("./mazes/1-2-tiny-search.txt", "1.2");
-    // Maze* maze2 = new Maze("./mazes/1-2-tiny-search.txt", "1.2");
+    Maze* maze1 = new Maze("./mazes/1-2-small-search.txt", "1.2");
+    Maze* maze2 = new Maze("./mazes/1-2-small-search.txt", "1.2");
 
-    // search(maze1, "BFS");
-    // maze1->printSolution();
-    // search(maze2, "A*");
-    // maze2->printSolution();
+    search(maze1, "BFS");
+    maze1->printSolution();
+    search(maze2, "A*");
+    maze2->printSolution();
 
-    // delete maze1;
-    // delete maze2;
+    delete maze1;
+    delete maze2;
 
 
     /*******************************************************

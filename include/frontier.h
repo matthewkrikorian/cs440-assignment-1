@@ -43,6 +43,8 @@ private:
             int left = l.heuristic + l.pathCost;
             int right = r.heuristic + r.pathCost;
             if(left == right){
+                if(l.pathCost == r.pathCost)
+                    return l.heuristic > r.heuristic;
                 return l.pathCost > r.pathCost;
             }
             else{
