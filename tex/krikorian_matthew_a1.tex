@@ -34,6 +34,33 @@
 \begin{document}
 
 \maketitle
+
+\section*{Implementation Described}
+\subsection*{State Representation}
+The states in our project are determined by the following attributes:
+\begin{itemize}
+\item $x$, $y$ position in maze
+\item number of dots collected thus far
+\item which dots were collected
+\end{itemize}
+In order to optimize performance, we represent which dots have been collected as an unsigned 32-bit integer, where the $i$-th bit represents whether the $i$-th dot has been collected or not. We can use bitwise operators to create these numbers quickly.\\
+
+
+\noindent In order to allow fast lookup of neighbors, we store all maze states visited in a 3D array of hashmaps. The first argument to the array is $x$-coordinate, the second is $y$-coordinate, the third is the number of dots collected, and the key to the hashmap is the unsigned integer representing which dots have been collected thus far. This has the benefit of storing \textbf{only} the combinations of dots that have been collected thus far, instead of allocating space to account for all $2^{\textit{numberOfDots}}$ combinations for every possible position and number of dots collected.
+\subsection*{Frontier Representation}
+
+Our frontier is a doubly linked list implemented as a deque, or \textit{double-ended queue}, and synchronized with a min-priority queue.  Double-ended means push and pop operations work on both the front and back of the frontier, allowing it to act as a stack or a queue. Moreover, since the frontier is backed by a min-priority queue, the frontier node with the lowest cost can be found and removed in $O(\lg n)$ time.\\
+
+\noindent It follows that we can use the following functionalities of the frontier for the four different search methods:
+\begin{itemize}
+\item DFS - uses frontier as a stack
+\item BFS - uses frontier as a queue
+\item Greedy - uses frontier as a min-priority queue on heuristic cost
+\item A* - uses frontier as a min-priority queue on heuristic cost + path cost
+\end{itemize}
+\noindent
+
+
 %
 %\section{Abstract}
 %In this assignment we explore the different search algorithms that can be used to traverse a maze, and analyze the optimality's and general performance between the different implementations under a very heavy scope. In section 1.1 (basic pathfinding), we analyzed four different pathfinding algorithms. Specifically, Depth-first search, Breadth-first search, Greedy best-first search, and A* search. In section 1.2 (search with multiple dots), we were tasked with developing our own heuristic in the implementation of our A* search algorithm. There are also multiple goal positions in section 1.2 as well, which is why coming up with an admissible heuristic to optimally traverse the mazes was paramount.
