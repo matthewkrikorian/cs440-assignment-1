@@ -63,7 +63,7 @@ In this part of the assignment we implemented four different search algorithms t
 \noindent
 \textbf{Greedy best-first search} is a search algorithm that always chooses to go down the path that has the lowest cost with respect to the other neighbors of the current node it is on. The name greedy implies that it does not care about the actions of the future, but rather only chooses it's path on the best choice to it based on immediate cost. Greedy algorithms evaluate the nodes they are going to travel to using a heuristic function. This heuristic does not use past or future information to make any decisions, which sets it apart from both the BFS and DFS search algorithms. The algorithm chooses the next node it will travel to directly from the heuristic function it is given, so the choosing function \(f(n)\) can be modeled as \(f(n) = h(n)\) where \(h(n)\) is the heuristic function.\newline
 \newline
-Finally, \textbf{A* search} is a search algorithm where the function used to evaluate which node the algorithm will travel to next, \(f(n)\), is dependent on both the cost from the start node to the goal node, \(g(n)\), and the cost to get from the current node to the goal node, \(h(n)\). The node selection function is actually modeled as the direct sum of \(h(n)\) and \(g(n)\), giving us \(f(n) = h(n) + g(n)\). This algorithm is thought of as the algorithm amongst the four that often provides the most savings, and can be optimized heavily through a very good heuristic function \(h(n)\).
+Finally, \textbf{A* search} is a search algorithm where the function used to evaluate which node the algorithm will travel to next, \(f(n)\), is dependent on both the cost from the start node to the current node, \(g(n)\), and the cost to get from the current node to the goal node, \(h(n)\). The node selection function is actually modeled as the direct sum of \(h(n)\) and \(g(n)\), giving us \(f(n) = h(n) + g(n)\). This algorithm is thought of as the algorithm amongst the four that often provides the most savings, and can be optimized heavily through a very good heuristic function \(h(n)\).
 
 \subsection{Our Code, Explained}
 Our assignment is broken up into a \textit{src} folder which holds all of our \textit{.cpp} files, our \textit{include} folder holds all of the \textit{.h} files that we wrote, our \textit{build} folder holds all of the \textit{.o} files that are used in compilation, our \textit{bin} folder contains all of the \textit{.exe} files that we use to execute our search algorithms, and the \textit{tex} folder holds all of the \textit{.tex} that was used to compile the pdf that we submitted. 
@@ -113,47 +113,61 @@ The various push and pop functions in our Frontier class are used to easily mana
 class Maze {
 
 public:
-    Maze(std::string filename);
+    Maze(std::string filename, std::string version);
     ~Maze();
     Node* getStart();
-    std::vector<Node*>* getGoals();
+    std::vector<Node*> getGoals();
+    int getNumGoals();
     void printSolution();
     std::string getName();
+    std::string getVersion();
+    std::vector<Node*> getNeighbors(Node* cur, int numDots, uint32_t hash);
+    void visit(Node* curNode);
+    void setSymbol(Node* curNode, int place);
+    bool canSetSymbol(Node* curNode);
 
 private:
-    std::string name;
+    std::string name, version;
     Node* start;
-    std::vector<Node*>* goals;
-    Node*** maze;
-    int w, h;
+    std::vector<Node*> goals;
+    std::unordered_map<uint32_t, Node*>**** maze;
+    int w, h, numGoals;
+
 };
 \end{lstlisting}
 
-The purpose of \textit{maze.cpp} and \textit{maze.h} in our assigment is to take in an inputted maze text file, parse it, and allocate a 2-dimensional matrix which holds all the information related to the contents of the maze. After extracting the contents of the maze and putting it in a 2-dimensional array, the maze class writes the data in the array into Nodes which store the essential information of each position of the maze. This class can be thought of as the maze creation class, initializing all of the Nodes that are going to be used in the \textit{main.cpp} file to build the frontier.
-
-\newpage
+The purpose of \textit{maze.cpp} and \textit{maze.h} in our assigment is to take in an inputted maze text file, parse it, and allocate a 2-dimensional matrix which holds all the information related to the contents of the maze. After extracting the contents of the maze and putting it in a 2-dimensional array, the maze class writes the data in the array into Nodes which store the essential information of each position of the maze. This class can be thought of as the maze creation class, initializing all of the Nodes that are going to be used in the \textit{main.cpp} file to build the frontier. This class also holds functions used to write to the maze in Section 1.2, such as setSymbol and canSetSymbol, which are used to label symbols on the multiple goal states in the later mazes we need to traverse.
 
 \subsubsection{\textit{node.cpp} and \textit{node.h}}
 \begin{lstlisting}
 class Node {
 
 public:
-    Node(int x, int y);
-    ~Node();
-    std::vector<Node*>* getNeighbors();
-    void addNeighbor(Node*);
+    Node(int x, int y, int numDots, uint32_t dotsHash, int dotId = -1);
     bool isVisited();
     void visit();
+    bool isGoal();
     int getX();
     int getY();
+    int getDots();
+    uint32_t getDotsTakenHash();
+    int getDotId();
+    void setTaken(int dotNumber);
+    bool hasTaken(int dotNumber);
+    void setSymbol(int place);
+    char getSymbol();
+    bool canSet();
 
 private:
-    int x, y;
-    std::vector<Node*>* neighbors;
-    bool visited;
+    int x, y, numDots, dotId;
+    uint32_t dotsHash;
+    char symbol;
+    bool visited, notSet;
+    static const unsigned char* symbols;
+
 };
 \end{lstlisting}
-The Node class is the basis of how the maze is traversed and information relevant to the maze is stored. Every node is initialized with an x and y coordinate value, the neighbors of the given node in the maze stored in a vector of Node pointers, and a boolean value that determines whether any given search algorithm has already visited that Node. The Node class along with the FrontierNode class are the foundational Nodes used to traverse the maze and store the solution that is to be printed after the algorithm is done searching for the goal state. 
+The Node class is the basis of how the maze is traversed and information relevant to the maze is stored. Every node is initialized with an x and y coordinate value, the neighbors of the given node in the maze stored in a vector of Node pointers, and a boolean value that determines whether any given search algorithm has already visited that Node. The Node class along with the FrontierNode class are the foundational Nodes used to traverse the maze and store the solution that is to be printed after the algorithm is done searching for the goal state. The third dimension of the array that keeps all the data in a node is populated with the numDots variable, which keeps track of how many dots have been collected in the traversal from that node. The symbols char is used to hold the character that is to be written at the designated maze location for Section 1.2, as well as the setSymbol and getSymbol functions.
 
 \subsubsection{\textit{main.cpp}}
 This file is the body where all of the Nodes and FrontierNodes are processed and the main algorithms are implemented. This file is where the functions to manage the stack for Depth-first search is managed as well as the queue for Breadth-first search are called and the overall algorithm for those two algorithms is implemented. This file is also where the solution frontier for both Greedy and A* Search are maintained and handled, and the manhattan distance heuristic is used to properly calculate the next Node to be traversed. We've also implemented the backtracking in this file which handles re-visiting the last Node with unexplored neighbors. After each maze is traversed and a solution is found, this file then goes and prints the respective solutions for each maze.
@@ -281,14 +295,51 @@ The Manhattan Distance is what we used to calculate the heuristic function. This
 \[ |Node_{x, 1} - Node_{x, 2}| + |Node_{y, 1} - Node_{y, 2}|   \]
 
 \noindent
-This heuristic is used when an algorithm must traverse a setting in which it can only make 90\degree turns, which makes sense given the name is derived from the way one would traverse New York City if walking on foot. The streets and avenues are all perpendicular to one another, so one traversing the city would use the same heuristic as both the Greedy and A* search algorithms did in our assignment. Every node pushed onto the frontier has the Manhattan Distance of its neighbors calculated, and the node with the best path-cost to the goal state is pushed onto the frontier. We also use the Manhattan Distance in both the Greedy and A* search algorithms to determine if the Node at the top of the minHeap has the lowest cost to the goal state, because Manhattan Distance is the heuristic used for both of those search algorithms. Greedy depends entirely on the Manhattan Distance heuristic, while A* sums it with the path cost of the starting node to the goal state.
+This heuristic is used when an algorithm must traverse a setting in which it can only make 90\degree turns, which makes sense given the name is derived from the way one would traverse New York City if walking on foot. The streets and avenues are all perpendicular to one another, so one traversing the city would use the same heuristic as both the Greedy and A* search algorithms did in our assignment. Every node pushed onto the frontier has the Manhattan Distance of its neighbors calculated, and the node with the best path-cost to the goal state is pushed onto the frontier. We also use the Manhattan Distance in both the Greedy and A* search algorithms to determine if the Node at the top of the minHeap has the lowest cost to the goal state, because Manhattan Distance is the heuristic used for both of those search algorithms. Greedy depends entirely on the Manhattan Distance heuristic, while A* sums it with the path cost of the starting node to the current node.
 
 \subsection{Summary and Closing Points}
-As said before, we used a stack to manage the nodes the that will be part of the solution for our Depth-first search algorithm, we used a queue to manage the nodes used in our Breadth-first search algorithm, and then a Priority Queue that we wrote from scratch to manage the solution path for both Greedy search and A* search. We also used a minNodeHeap to keep track of the frontier nodes that acted as wrappers for nodes that were to be included in the solution. The top node of the minNodeHeap was always the node with the suspected lowest path cost calculated differently based on which algorithm was being used. For Greedy search, it strictly used the Manhattan heuristic, for A* search is would take the sum of the heuristic and distance of the starting node to the goal node. We'd remove the frontier node wrapping a certain node from the heap if the information related to the node changed and no longer made it part of the frontier, such as having an incorrect path cost. 
+As said before, we used a stack to manage the nodes the that will be part of the solution for our Depth-first search algorithm, we used a queue to manage the nodes used in our Breadth-first search algorithm, and then a Priority Queue that we wrote from scratch to manage the solution path for both Greedy search and A* search. We also used a minNodeHeap to keep track of the frontier nodes that acted as wrappers for nodes that were to be included in the solution. The top node of the minNodeHeap was always the node with the suspected lowest path cost calculated differently based on which algorithm was being used. For Greedy search, it strictly used the Manhattan heuristic, for A* search is would take the sum of the heuristic and distance of the starting node to the current node. We'd remove the frontier node wrapping a certain node from the heap if the information related to the node changed and no longer made it part of the frontier, such as having an incorrect path cost. 
 
 \newpage
 
 \section{Section 1.2, Search With Multiple Dots} 
+In Section 1.2, the plot thickens yet again. We are now told to evaluate mazes that are much smaller than the mazes in Section 1.1, however the mazes now have multiple goal states. The starting state of the mazes in this section start with 'P' and end have goal denoted by the '.' symbol. The difference this time is we can't draw the dots to represent the path our algorithm takes as it would be too costly, so what we do instead in our implementation in this section is to draw letters at each of the goal states in the order that the implementation arrives to that state. The goal states are represented with alpha-numerical characters for numbers \textit{1-9}, and then we begin to use the alphabetical characters \textit{a-z} once the \textit{9th} goal state is labeled. For debugging purposes we ran Breadth-first search on the tiny maze and the small maze, and then only ran our custom heuristic for A* on the medium maze. 
+
+\subsection{Our Heuristic, Explained}
+The heuristic we chose to use for our A* search is to calculate the distance from the current node of the algorithm to each of the goal states and create a minimum spanning tree. Using this minimum spanning tree and the A* traversal technique we developed in section 1.1, we were able to solve all three of the different sized mazes. Our heuristic is also admissible because the sum of the path cost from the starting position to the current node added to the Manhattan Distance edge of the Minimum Spanning Tree we create from the current node to each of the goal nodes will always under-estimate the true cost to each goal state. Since our heuristic will always under-estimate the true cost of reaching each node, our heuristic passes as being admissible. Our heuristic also never over-estimates the distance to any goal state, because if there are walls in between the current node and the goal state, our heuristic will always calculate a much smaller distance than the distance of the path the algorithm will actually have to take, thus confirming once again that we never over-estimate the cost to reach the goal, proving admissibility. 
+
+\subsection{Minimum Spanning Tree Implementation, Explained}
+To implement our A* search in Section 1.2, we used a Minim Spanning Tree to store the edges between nodes in the frontier and each goal state. We use the Disjoint Sets data structure to implement the minimum spanning tree for efficiency purposes and to properly store and manage the data we continually are editing for each node.
+
+\newpage
+
+\begin{figure}[h!]
+\includegraphics[width=\linewidth]{mst.png}
+\caption{A minimum spanning tree with weighted edges between different nodes}
+\label{fig:MST}
+\end{figure}
+
+\noindent
+To implement the minimum spanning tree we needed to use the disjoint sets data structure, below is the class definition in our header file that we used to implement it.
+
+\begin{lstlisting}
+class DisjointSets {
+
+	public:
+		void addelements(int num);
+		int find(int elem);
+		void setunion(int a, int b);
+
+	private:
+		std::vector<int> uptree;
+};
+\end{lstlisting}
+
+\newpage
+
+\noindent
+yololo
+
 \end{document}
 
 

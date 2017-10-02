@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  26 SEP 2017 14:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  1 OCT 2017 18:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -213,105 +213,111 @@ Underfull \hbox (badness 10000) in paragraph at lines 63--67
 
  []
 
-[2 <./dfs.png>] [3] [4] [5] <dfsmedium.png, id=35, 471.7625pt x 503.8825pt>
+[2 <./dfs.png>] [3] [4] [5] [6]
+<dfsmedium.png, id=39, 475.7775pt x 544.0325pt>
 File: dfsmedium.png Graphic file (type png)
-
-<use dfsmedium.png>
-Package pdftex.def Info: dfsmedium.png used on input line 168.
-(pdftex.def)             Requested size: 345.0pt x 368.49239pt.
- [6 <./dfsmedium.png>]
-<dfsbig.png, id=41, 623.32875pt x 662.475pt>
+ <use dfsmedium.png>
+Package pdftex.def Info: dfsmedium.png used on input line 182.
+(pdftex.def)             Requested size: 345.0pt x 394.50893pt.
+ [7 <./dfsmedium.png>] <dfsbig.png, id=44, 617.30624pt x 698.61pt>
 File: dfsbig.png Graphic file (type png)
  <use dfsbig.png>
-Package pdftex.def Info: dfsbig.png used on input line 176.
-(pdftex.def)             Requested size: 345.0pt x 366.66713pt.
- [7 <./dfsbig.png>] <dfsopen.png, id=46, 368.37625pt x 439.6425pt>
+Package pdftex.def Info: dfsbig.png used on input line 190.
+(pdftex.def)             Requested size: 345.0pt x 390.45142pt.
+
+[8 <./dfsbig.png>] <dfsopen.png, id=49, 367.3725pt x 479.7925pt>
 File: dfsopen.png Graphic file (type png)
- <use dfsopen.png>
-Package pdftex.def Info: dfsopen.png used on input line 185.
-(pdftex.def)             Requested size: 345.0pt x 411.7412pt.
- [8 <./dfsopen.png>] <bfsmedium.png, id=51, 470.75874pt x 502.87875pt>
+
+<use dfsopen.png>
+Package pdftex.def Info: dfsopen.png used on input line 199.
+(pdftex.def)             Requested size: 345.0pt x 450.60234pt.
+ [9 <./dfsopen.png>]
+<bfsmedium.png, id=54, 473.77pt x 546.04pt>
 File: bfsmedium.png Graphic file (type png)
  <use bfsmedium.png>
-Package pdftex.def Info: bfsmedium.png used on input line 196.
-(pdftex.def)             Requested size: 345.0pt x 368.54102pt.
-
-[9 <./bfsmedium.png>] <bfsbig.png, id=56, 623.32875pt x 662.475pt>
+Package pdftex.def Info: bfsmedium.png used on input line 210.
+(pdftex.def)             Requested size: 345.0pt x 397.63939pt.
+ [10 <./bfsmedium.png>] <bfsbig.png, id=59, 620.3175pt x 699.61375pt>
 File: bfsbig.png Graphic file (type png)
-
-<use bfsbig.png>
-Package pdftex.def Info: bfsbig.png used on input line 204.
-(pdftex.def)             Requested size: 345.0pt x 366.66713pt.
- [10 <./bfsbig.png>]
-<bfsopen.png, id=61, 368.37625pt x 442.65375pt>
+ <use bfsbig.png>
+Package pdftex.def Info: bfsbig.png used on input line 218.
+(pdftex.def)             Requested size: 345.0pt x 389.10155pt.
+ [11 <./bfsbig.png>] <bfsopen.png, id=64, 368.37625pt x 479.7925pt>
 File: bfsopen.png Graphic file (type png)
  <use bfsopen.png>
-Package pdftex.def Info: bfsopen.png used on input line 213.
-(pdftex.def)             Requested size: 345.0pt x 414.56133pt.
- [11 <./bfsopen.png>] <greedymedium.png, id=66, 467.7475pt x 501.875pt>
+Package pdftex.def Info: bfsopen.png used on input line 227.
+(pdftex.def)             Requested size: 345.0pt x 449.34311pt.
+
+[12 <./bfsopen.png>] <greedymedium.png, id=70, 464.73625pt x 544.0325pt>
 File: greedymedium.png Graphic file (type png)
 
 <use greedymedium.png>
-Package pdftex.def Info: greedymedium.png used on input line 225.
-(pdftex.def)             Requested size: 345.0pt x 370.18703pt.
- [12 <./greedymedium.png>]
-<greedybig.png, id=72, 616.3025pt x 667.49374pt>
+Package pdftex.def Info: greedymedium.png used on input line 239.
+(pdftex.def)             Requested size: 345.0pt x 403.87274pt.
+ [13 <./greedymedium.png>]
+<greedybig.png, id=75, 619.31375pt x 699.61375pt>
 File: greedybig.png Graphic file (type png)
  <use greedybig.png>
-Package pdftex.def Info: greedybig.png used on input line 233.
-(pdftex.def)             Requested size: 345.0pt x 373.66154pt.
- [13 <./greedybig.png>] <greedyopen.png, id=77, 396.48125pt x 445.665pt>
+Package pdftex.def Info: greedybig.png used on input line 247.
+(pdftex.def)             Requested size: 345.0pt x 389.74207pt.
+ [14 <./greedybig.png>] <greedyopen.png, id=80, 387.4475pt x 482.80376pt>
 File: greedyopen.png Graphic file (type png)
 
 <use greedyopen.png>
-Package pdftex.def Info: greedyopen.png used on input line 242.
-(pdftex.def)             Requested size: 345.0pt x 387.80702pt.
- [14 <./greedyopen.png>]
-<astarmedium.png, id=82, 466.74374pt x 500.87125pt>
+Package pdftex.def Info: greedyopen.png used on input line 256.
+(pdftex.def)             Requested size: 345.0pt x 429.91501pt.
+ [15 <./greedyopen.png>]
+<astarmedium.png, id=85, 470.75874pt x 540.0175pt>
 File: astarmedium.png Graphic file (type png)
  <use astarmedium.png>
-Package pdftex.def Info: astarmedium.png used on input line 254.
-(pdftex.def)             Requested size: 345.0pt x 370.24149pt.
+Package pdftex.def Info: astarmedium.png used on input line 268.
+(pdftex.def)             Requested size: 345.0pt x 395.7586pt.
 
-[15 <./astarmedium.png>] <astarbig.png, id=87, 617.30624pt x 663.47874pt>
+[16 <./astarmedium.png>] <astarbig.png, id=90, 616.3025pt x 698.61pt>
 File: astarbig.png Graphic file (type png)
 
 <use astarbig.png>
-Package pdftex.def Info: astarbig.png used on input line 262.
-(pdftex.def)             Requested size: 345.0pt x 370.81664pt.
- [16 <./astarbig.png>]
-<astaropen.png, id=92, 357.335pt x 440.64626pt>
+Package pdftex.def Info: astarbig.png used on input line 276.
+(pdftex.def)             Requested size: 345.0pt x 391.08035pt.
+ [17 <./astarbig.png>]
+<astaropen.png, id=95, 359.3425pt x 479.7925pt>
 File: astaropen.png Graphic file (type png)
  <use astaropen.png>
-Package pdftex.def Info: astaropen.png used on input line 271.
-(pdftex.def)             Requested size: 345.0pt x 425.4563pt.
- [17 <./astaropen.png>] [18] [19] (./krikorian_matthew_a1.aux) ) 
+Package pdftex.def Info: astaropen.png used on input line 285.
+(pdftex.def)             Requested size: 345.0pt x 460.67607pt.
+ [18 <./astaropen.png>] [19] [20] <mst.png, id=111, 1204.5pt x 971.63pt>
+File: mst.png Graphic file (type png)
+ <use mst.png>
+Package pdftex.def Info: mst.png used on input line 317.
+(pdftex.def)             Requested size: 345.0pt x 278.29623pt.
+
+[21 <./mst.png>] [22] (./krikorian_matthew_a1.aux) ) 
 Here is how much of TeX's memory you used:
- 3015 strings out of 493014
- 43767 string characters out of 6133351
+ 3054 strings out of 493014
+ 44229 string characters out of 6133351
  141283 words of memory out of 5000000
- 6525 multiletter control sequences out of 15000+600000
+ 6563 multiletter control sequences out of 15000+600000
  9066 words of font info for 32 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,6n,40p,1008b,1494s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/tex
-live/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texl
-ive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texli
-ve/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texl
-ive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texli
-ve/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive
-/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2
-016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/201
-6/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2016/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2016/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2016/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2016/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2016/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on krikorian_matthew_a1.pdf (20 pages, 599136 bytes).
+ 38i,6n,40p,1170b,1494s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2016/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2016/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2016/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2016/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2016/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2016/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2016/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2016/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2016/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2016/texmf-dist/font
+s/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2016/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2016/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2016/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmtt9.pfb>
+Output written on krikorian_matthew_a1.pdf (23 pages, 709884 bytes).
 PDF statistics:
- 150 PDF objects out of 1000 (max. 8388607)
- 86 compressed objects within 1 object stream
+ 161 PDF objects out of 1000 (max. 8388607)
+ 92 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 71 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 76 words of extra memory for PDF output out of 10000 (max. 10000000)
 
