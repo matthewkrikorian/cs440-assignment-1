@@ -20,7 +20,7 @@ Node::Node(int x, int y, int numDots, uint32_t dotsHash, int dotId){
     this->numDots = numDots;
     this->dotsHash = dotsHash;
     this->visited = false;
-    this->symbol = '*';
+    this->symbol = ' ';
     this->notSet = true;
 }
 
@@ -69,6 +69,11 @@ uint32_t Node::getDotsTakenHash(){
 
 void Node::setSymbol(int place){
     if(notSet) {
+        if(place == -1){
+            this->symbol = '.';
+            notSet = false;
+            return;
+        }
         this->symbol = symbols[place];
         notSet = false;
     }

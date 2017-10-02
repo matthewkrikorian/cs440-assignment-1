@@ -6,10 +6,11 @@
 
 using namespace std;
 
-Maze::Maze(string filename, string version){
+Maze::Maze(string filename, string version, string style){
     ifstream input(filename);
     this->name = filename;
     this->version = version;
+    this->style = style;
 
     w = 0;
     h = 0;
@@ -67,7 +68,7 @@ Maze::Maze(string filename, string version){
                     maze[x][y][i] = NULL;
                 }
             }
-            if(temp[x] == 'P')
+            if(temp[x] == 'P') //mark the start
                 start = maze[x][y][0]->at(0);
         }
         y++;
@@ -163,7 +164,7 @@ void Maze::setSymbol(Node* curNode, int place){
 }
 
 void Maze::printSolution(){
-    if(version.compare("1.2") == 0){
+    if( version.compare("1.2") == 0 ){
             for(int i = 0; i < h; i++){
                 for(int j = 0; j < w; j++){
                     if(maze[j][i][0] == NULL){
@@ -172,17 +173,14 @@ void Maze::printSolution(){
                     else if(maze[j][i][0]->at(0) == start){
                         cout << 'P';
                     }
-                    else if(maze[j][i][0]->at(0)->isGoal()){
-                        cout << maze[j][i][0]->at(0)->getSymbol();
-                    }
                     else {
-                        cout << ' ';
+                        cout << maze[j][i][0]->at(0)->getSymbol();
                     }
                 }
                 cout << '\n';
             }
     }
-    else if (version.compare("1.1") == 0){
+    else if ( version.compare("1.1") == 0 ){
         for(int i = 0; i < h; i++){
             for(int j = 0; j < w; j++){
                 if(maze[j][i][0] == NULL){
@@ -209,4 +207,8 @@ string Maze::getName(){
 
 string Maze::getVersion(){
     return version;
+}
+
+string Maze::getStyle(){
+    return style;
 }

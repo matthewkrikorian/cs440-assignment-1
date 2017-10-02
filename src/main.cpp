@@ -164,6 +164,9 @@ void search(Maze* maze, string method){
         if((*rit)->isGoal() && maze->canSetSymbol(*rit)){
             maze->setSymbol(*rit, curDotsCollected++);
         }
+        else if( !(*rit)->isGoal() && maze->getStyle().compare("dots") == 0 ) {
+            maze->setSymbol(*rit, -1);
+        }
     }
 
     cout << explored.size() << " nodes explored during search.\n";
@@ -198,15 +201,15 @@ int main(int argc, char const *argv[]) {
     MP 1.2 - Uncomment below to run
     *******************************************************/
 
-    Maze* maze1 = new Maze("./mazes/1-2-small-search.txt", "1.2");
-    Maze* maze2 = new Maze("./mazes/1-2-small-search.txt", "1.2");
+    // Maze* maze1 = new Maze("./mazes/1-2-medium-search.txt", "1.2");
+    Maze* maze2 = new Maze("./mazes/1-2-medium-search.txt", "1.2", "dots");
 
-    search(maze1, "BFS");
-    maze1->printSolution();
+    // search(maze1, "BFS");
+    // maze1->printSolution();
     search(maze2, "A*");
     maze2->printSolution();
 
-    delete maze1;
+    // delete maze1;
     delete maze2;
 
 
