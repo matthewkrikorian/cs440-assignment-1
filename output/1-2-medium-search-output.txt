@@ -1,3 +1,4 @@
+Starting A* search on ./mazes/1-2-medium-search.txt
 Goal size: 20
 91143862 nodes explored during search.
 209 steps to reach goal.

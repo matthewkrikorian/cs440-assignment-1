@@ -206,7 +206,7 @@ int main(int argc, char const *argv[]) {
 
     // search(maze1, "BFS");
     // maze1->printSolution();
-    search(maze2, "A*");
+    search(maze2, "BFS");
     maze2->printSolution();
 
     // delete maze1;
