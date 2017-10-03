@@ -522,21 +522,22 @@ Below are the outputs we generated for the medium maze using the BFS and A* sear
 \newpage
 
 \subsection*{Our Heuristic, Explained}
-The heuristic we chose to use for our A* search is to calculate the distance from the current node of the algorithm to each of the goal states and create a minimum spanning tree. Using this minimum spanning tree and the A* traversal technique we developed in section 1.1, we were able to solve all three of the different sized mazes. Our heuristic is also admissible because the sum of the path cost from the starting position to the current node added to the Manhattan Distance edge of the Minimum Spanning Tree we create from the current node to each of the goal nodes will always under-estimate the true cost to each goal state. Since our heuristic will always under-estimate the true cost of reaching each node, our heuristic passes as being admissible. Our heuristic also never over-estimates the distance to any goal state, because if there are walls in between the current node and the goal state, our heuristic will always calculate a much smaller distance than the distance of the path the algorithm will actually have to take, thus confirming once again that we never over-estimate the cost to reach the goal, proving admissibility. Finally, on the fundamental level, the Minimum Spanning Tree heuristic is essentially the cost subgraph that connects all the nodes together. The solution path is also used to form a subgraph of nodes, the minimum spanning tree formed in the solution path graph cannot weigh less than the minimum spanning tree our algorithm uses to generate a solution, so our minimum spanning tree heuristic can never over-estimate the solution. Also, the generated subgraph by the solution will re-use edges that will get added to the overall path cost multiple times, whereas our minimum spanning tree heuristic will never re-use edges in path-cost calculation, proving even further that our minimum spanning tree heuristic will again only under-estimate the solution path cost, proving admissibility.
+For our A* search, we developed a heuristic based on the total weight of a manhattan distance minimum spanning tree that spans the current state position and the dots remaining. \\
+
+\noindent First realize that in graph-theoretic terms, the optimal walk, $W$, of the maze graph through all remaining dots covers some subgraph $S$ of the maze containing the current state position and each of the remaining dots. It follows that this optimal walk will cost at least as much as the cost of the subgraph it covers, more when edges are traversed multiple times. Letting $|\ |$ denote the cost of its argument, we have
+$$|S| \le |W|.$$
+\noindent By definition of a minimum spanning tree, any minimum spanning tree is a minimum cost subgraph of the nodes it contains. Also, notice that by using the manhattan distance function, we are actually underestimating the cost of connecting the dots and the current position in a minimum spanning tree since we don't account the true distance between dots around obstacles. Since $S$ contains at least the same nodes as the minimum spanning tree described, and the minimum spanning tree described (call it $MST$) is an underestimate of the minimum cost subgraph of these nodes, we can conclude that
+$$|MST| \le |S| \le |W|.$$
+
+\noindent Therefore, our heuristic is admissible. 
 
 \subsection*{Minimum Spanning Tree Implementation, Explained}
-To implement our A* search in Section 1.2, we used a Minim Spanning Tree to store the edges between nodes in the frontier and each goal state. We use the Disjoint Sets data structure to implement the minimum spanning tree for efficiency purposes and to properly store and manage the data we continually are editing for each node.
-
-\newpage
-
-\begin{figure}[h!]
-\includegraphics[width=\linewidth]{mst.png}
-\caption{A minimum spanning tree with weighted edges}
-\label{fig:MST}
-\end{figure}
+In order for the MST implementation to be quick, we calculate the MSTs of the remaining dots and cache the result, using the binary digit representing the remaining dots (described at the beginning of this paper) as a key. However, we seek to find an MST cost of the remaining dots and the current position, not an MST cost of only the remaining dots. Notice that we can get the MST cost of the current position and the dots remaining by simply adding adding the nearest neighbor manhattan distance to the MST cost cached. Since it's the smallest "edge" connecting the dots to the current position, Kruskal's Algorithm dictates that it would've been a part of the MST.\\
 
 \noindent
-The minimum spanning tree's role in the A* search algorithm is to calculate a values for the heuristic that is used in calculating values for the node choosing function. For each neighbor of the current node being analyzed, we use the distance of each neighbor to the nearest remaining dot on the board, adding it to the minimum spanning tree cost of that node. This allows us to put the minimum spanning tree cost of the neighbor node and the remaining dots in a single minimum spanning tree, which then gets used to calculate which node we traverse to next.
+The MSTs are created in $O(V^2 \lg V)$, where $V$ is the number of dots remaining in the maze. Since there are often few dots in the mazes, this heuristic can run very quickly. We used disjoint sets in conjunction with Kruskal's algorithm to form the MST.
+
+
 
 \subsection*{Team Involvement}
 Jon Reynolds was responsible for implementing the maze class, and the node class as well as implementing the minimum spanning tree in section 1.2, as well as documenting his respective work in the report. Matthew Krikorian was responsible for writing the maze class and the main file which processed the mazes, as well as documenting the respective work in the report. Patrick McMahon was responsible for coming up with the heuristic for section 1.2, as well as implementing the disjoint sets class and the frontier class, as well as documenting his respective work in the report.
