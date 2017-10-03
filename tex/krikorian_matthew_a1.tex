@@ -535,6 +535,10 @@ $$|MST| \le |S| \le |W|.$$
 The MSTs are created in $O(V^2 \lg V)$, where $V$ is the number of dots remaining in the maze + 1 for the current state position. Since there are often few dots in the mazes, this heuristic can run very quickly. We used disjoint sets in conjunction with Kruskal's algorithm to form the MST.
 
 
+\subsection*{Heuristic Efficiency}
+See that for the small and tiny mazes, we can compare our A* search to the results of our BFS searches. For both mazes, A* generates an optimal path through the maze, and moreover, it explores and expands far fewer nodes during the traversal. While we couldn't manage to perform a BFS that would finish on the medium maze, we suspect that our A* search finds the optimal path for this maze well. It also was able to run rather quickly for the medium maze as well, finishing the search over 90 million nodes in a little over a half hour.
+
+
 
 
 \subsection*{Team Involvement}
