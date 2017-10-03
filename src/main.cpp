@@ -35,22 +35,17 @@ int getMSTLength(Node* n, vector<Node*> goals){
     uint32_t hash = n->getDotsTakenHash();
     uint32_t tempHash = hash;
     int numDots = goals.size();
-    if(memo.find(hash) != memo.end()){
-        //do nothing
-    }
-    else { //make the mst and compute sum of edges
-        vector<Node*> dots;
-        for(int i = 0; i < numDots; i++){
-            if(!(tempHash & 1)){
-                dots.push_back(goals[i]);
-            }
-            tempHash = tempHash >> 1;
+    vector<Node*> dots;
+    dots.push_back(n);
+    for(int i = 0; i < numDots; i++){
+        if(!(tempHash & 1)){
+            dots.push_back(goals[i]);
         }
-        MST mst(dots, numDots);
-        memo[hash] = mst.getTotalCost();
+        tempHash = tempHash >> 1;
     }
-    return memo[hash] + getNearestNeighborDistance(n, goals);
-
+    MST mst(dots, numDots);
+    int val = mst.getTotalCost();
+    return val + getNearestNeighborDistance(n, goals);
 }
 
 void search(Maze* maze, string method){
@@ -202,11 +197,11 @@ int main(int argc, char const *argv[]) {
     *******************************************************/
 
     // Maze* maze1 = new Maze("./mazes/1-2-medium-search.txt", "1.2");
-    Maze* maze2 = new Maze("./mazes/1-2-medium-search.txt", "1.2", "dots");
+    Maze* maze2 = new Maze("./mazes/1-2-tiny-search.txt", "1.2", "dots");
 
     // search(maze1, "BFS");
     // maze1->printSolution();
-    search(maze2, "BFS");
+    search(maze2, "A*");
     maze2->printSolution();
 
     // delete maze1;

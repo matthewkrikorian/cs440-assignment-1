@@ -532,10 +532,8 @@ $$|MST| \le |S| \le |W|.$$
 \noindent Therefore, our heuristic is admissible. 
 
 \subsection*{Minimum Spanning Tree Implementation, Explained}
-In order for the MST implementation to be quick, we calculate the MSTs of the remaining dots and cache the result, using the binary digit representing the remaining dots (described at the beginning of this paper) as a key. However, we seek to find an MST cost of the remaining dots and the current position, not an MST cost of only the remaining dots. Notice that we can get the MST cost of the current position and the dots remaining by simply adding adding the nearest neighbor manhattan distance to the MST cost cached. Since it's the smallest "edge" connecting the dots to the current position, Kruskal's Algorithm dictates that it would've been a part of the MST.\\
+The MSTs are created in $O(V^2 \lg V)$, where $V$ is the number of dots remaining in the maze + 1 for the current state position. Since there are often few dots in the mazes, this heuristic can run very quickly. We used disjoint sets in conjunction with Kruskal's algorithm to form the MST.
 
-\noindent
-The MSTs are created in $O(V^2 \lg V)$, where $V$ is the number of dots remaining in the maze. Since there are often few dots in the mazes, this heuristic can run very quickly. We used disjoint sets in conjunction with Kruskal's algorithm to form the MST.
 
 
 

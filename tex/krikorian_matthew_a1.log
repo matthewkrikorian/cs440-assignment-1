@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  2 OCT 2017 22:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  2 OCT 2017 23:11
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -330,21 +330,16 @@ Underfull \hbox (badness 10000) in paragraph at lines 525--526
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 535--536
-
- []
-
-[19] [20] (./krikorian_matthew_a1.aux)
+[19] (./krikorian_matthew_a1.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 2924 strings out of 493089
- 43089 string characters out of 6134842
+ 2923 strings out of 493089
+ 43080 string characters out of 6134842
  122904 words of memory out of 5000000
- 6374 multiletter control sequences out of 15000+600000
+ 6373 multiletter control sequences out of 15000+600000
  8241 words of font info for 29 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  38i,6n,40p,1012b,232s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -357,10 +352,10 @@ sr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
 ocal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/loca
 l/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local
 /texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on krikorian_matthew_a1.pdf (21 pages, 613575 bytes).
+Output written on krikorian_matthew_a1.pdf (20 pages, 612153 bytes).
 PDF statistics:
- 143 PDF objects out of 1000 (max. 8388607)
- 76 compressed objects within 1 object stream
+ 140 PDF objects out of 1000 (max. 8388607)
+ 74 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  86 words of extra memory for PDF output out of 10000 (max. 10000000)
 
