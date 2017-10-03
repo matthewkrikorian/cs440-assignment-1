@@ -2,12 +2,18 @@
 
 using namespace std;
 
+/**
+ * Constructor for Frontier class
+ */
 Frontier::Frontier(){
     head = NULL;
     tail = NULL;
     size = 0;
 }
 
+/**
+ * Destructor for Frontier class
+ */
 Frontier::~Frontier(){
     unordered_map<Node*, Node*> fakeHistory;
     while(!empty()){
@@ -16,6 +22,9 @@ Frontier::~Frontier(){
     }
 }
 
+/**
+ * Inserts a node with the passed heuristic and pathCost at the back of the queue
+ */
 void Frontier::push_back(Node* node, Node* prevNode, int hval, int cost){
     FrontierNode* fnode = new FrontierNode;
     fnode->node = node;
@@ -36,6 +45,9 @@ void Frontier::push_back(Node* node, Node* prevNode, int hval, int cost){
     size++;
 }
 
+/**
+ * Inserts a node with the passed heuristic and pathCost at the front of the queue
+ */
 void Frontier::push_front(Node* node, Node* prevNode, int hval, int cost){
     FrontierNode* fnode = new FrontierNode;
     fnode->node = node;
@@ -56,16 +68,25 @@ void Frontier::push_front(Node* node, Node* prevNode, int hval, int cost){
     size++;
 }
 
+/**
+ * Pops a node from the back of the frontier and adds it to the history map passed
+ */
 FrontierNode* Frontier::pop_back(unordered_map<Node*, Node*>& history){
     if(empty()) return NULL;
     return remove(tail, history);
 }
 
+/**
+ * Pops a node from the front of the frontier and adds it to the history map passed
+ */
 FrontierNode* Frontier::pop_front(unordered_map<Node*, Node*>& history){
     if(empty()) return NULL;
     return remove(head, history);
 }
 
+/**
+ * Pops the minimum queue node and removes it from the list, adding it to the history map passed
+ */
 FrontierNode* Frontier::pop_min(unordered_map<Node*, Node*>& history){
     FrontierNode* actual;
     while(!minNodeHeap.empty()){
@@ -85,22 +106,38 @@ FrontierNode* Frontier::pop_min(unordered_map<Node*, Node*>& history){
     return NULL;
 }
 
+/**
+ * Gets the head of the Frontier
+ */
 FrontierNode* Frontier::getHead(){
     return head;
 }
 
+/**
+ * Gets the tail of the Frontier
+ */
 FrontierNode* Frontier::getTail(){
     return tail;
 }
 
+
+/**
+ * Returns true if queue is empty
+ */
 bool Frontier::empty(){
     return size == 0;
 }
 
+/**
+ * Returns size of queue
+ */
 int Frontier::getSize(){
     return size;
 }
 
+/**
+ * Removes a frontier node from the list and adds it to the history map passed
+ */
 FrontierNode* Frontier::remove(FrontierNode* fnode, unordered_map<Node*, Node*>& history){
     Node* ret = fnode->node;
     Node* prevNode = fnode->prevNode;
@@ -129,6 +166,9 @@ FrontierNode* Frontier::remove(FrontierNode* fnode, unordered_map<Node*, Node*>&
     return fnode;
 }
 
+/**
+ * Finds the FrontierNode wrapping the passed Node
+ */
 FrontierNode* Frontier::find(Node* node){
     if(nodeMap.find(node) != nodeMap.end())
         return nodeMap[node];
@@ -136,6 +176,9 @@ FrontierNode* Frontier::find(Node* node){
         return NULL;
 }
 
+/**
+ * Updates the min heap
+ */
 void Frontier::update(FrontierNode* fnode){
     minNodeHeap.push(*fnode);
 }

@@ -6,6 +6,10 @@
 
 using namespace std;
 
+
+/**
+ * Constructs maze from a file 
+ */
 Maze::Maze(string filename, string version, string style){
     ifstream input(filename);
     this->name = filename;
@@ -77,6 +81,9 @@ Maze::Maze(string filename, string version, string style){
 }
 
 
+/**
+ * Returns a Node vector of neighbors of the node passed in
+ */
 vector<Node*> Maze::getNeighbors(Node* cur, int dots, uint32_t hash){
     int x = cur->getX();
     int y = cur->getY();
@@ -113,6 +120,9 @@ vector<Node*> Maze::getNeighbors(Node* cur, int dots, uint32_t hash){
     return neighbors;
 }
 
+/**
+ * Destructor for Maze class
+ */
 Maze::~Maze(){
     for(int i = 0; i < w; i++){
         for(int j = 0; j < h; j++){
@@ -134,35 +144,58 @@ Maze::~Maze(){
     delete[] maze;
 }
 
+
+/**
+ * Returns start
+ */
 Node* Maze::getStart(){
     return start;
 }
+
+/**
+ * Returns goal nodes
+ */
 vector<Node*> Maze::getGoals(){
     return goals;
 }
 
+/**
+ * Returns number of goals (dots)
+ */
 int Maze::getNumGoals(){
     return numGoals;
 }
 
+/**
+ * Marks node as visited
+ */
 void Maze::visit(Node* curNode){
     int x = curNode->getX();
     int y = curNode->getY();
     maze[x][y][0]->at(0)->visit();
 }
 
+/**
+ * Checks if you can set symbol on the Node
+ */
 bool Maze::canSetSymbol(Node* curNode){
     int x = curNode->getX();
     int y = curNode->getY();
     return maze[x][y][0]->at(0)->canSet();
 }
 
+/**
+ * Set symbol on the Node
+ */
 void Maze::setSymbol(Node* curNode, int place){
     int x = curNode->getX();
     int y = curNode->getY();
     maze[x][y][0]->at(0)->setSymbol(place);
 }
 
+/**
+ * Print the solution to the maze
+ */
 void Maze::printSolution(){
     if( version.compare("1.2") == 0 ){
             for(int i = 0; i < h; i++){
@@ -201,14 +234,25 @@ void Maze::printSolution(){
     }
 }
 
+
+/**
+ * Returns filename of maze
+ */
 string Maze::getName(){
     return name;
 }
 
+
+/**
+ * Returns whether this is 1.1 or 1.2
+ */
 string Maze::getVersion(){
     return version;
 }
 
+/**
+ * Returns maze drawing style enabled
+ */
 string Maze::getStyle(){
     return style;
 }

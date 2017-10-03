@@ -12,7 +12,7 @@ MST::MST(const vector<Node*>& goals, int numDots){
     if(numGoals == 1){
         return;
     }
-    dsets.addelements(numDots+1);
+    dsets.addelements(numDots);
 
     for(int i = 0; i < numGoals; i++){
         for(int j = i+1; j < numGoals; j++){
@@ -27,32 +27,12 @@ MST::MST(const vector<Node*>& goals, int numDots){
     while(curVertices.size() != numGoals){
         Edge* minEdge = minEdgeHeap.top();
         minEdgeHeap.pop();
-        if(minEdge->v1->getDotId() == -1){
-            if(dsets.find(numDots + minEdge->v1->getDotId()) != dsets.find(minEdge->v2->getDotId())){ //if the vertices aren't in the same set (same component)
-                //then we can form an edge
-                dsets.setunion(numDots + minEdge->v1->getDotId(), minEdge->v2->getDotId());
-                totalCost += minEdge->length;
-                curVertices.insert(numDots + minEdge->v1->getDotId());
-                curVertices.insert(minEdge->v2->getDotId());
-            }
-        }
-        else if(minEdge->v2->getDotId() == -1){
-            if(dsets.find(minEdge->v1->getDotId()) != dsets.find(numDots + minEdge->v2->getDotId())){ //if the vertices aren't in the same set (same component)
-                //then we can form an edge
-                dsets.setunion(minEdge->v1->getDotId(), numDots + minEdge->v2->getDotId());
-                totalCost += minEdge->length;
-                curVertices.insert(minEdge->v1->getDotId());
-                curVertices.insert(numDots + minEdge->v2->getDotId());
-            }
-        }
-        else {
-            if(dsets.find(minEdge->v1->getDotId()) != dsets.find(minEdge->v2->getDotId())){ //if the vertices aren't in the same set (same component)
-                //then we can form an edge
-                dsets.setunion(minEdge->v1->getDotId(), minEdge->v2->getDotId());
-                totalCost += minEdge->length;
-                curVertices.insert(minEdge->v1->getDotId());
-                curVertices.insert(minEdge->v2->getDotId());
-            }
+        if(dsets.find(minEdge->v1->getDotId()) != dsets.find(minEdge->v2->getDotId())){ //if the vertices aren't in the same set (same component)
+            //then we can form an edge
+            dsets.setunion(minEdge->v1->getDotId(), minEdge->v2->getDotId());
+            totalCost += minEdge->length;
+            curVertices.insert(minEdge->v1->getDotId());
+            curVertices.insert(minEdge->v2->getDotId());
         }
         delete minEdge;
     }

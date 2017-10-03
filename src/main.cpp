@@ -35,17 +35,22 @@ int getMSTLength(Node* n, vector<Node*> goals){
     uint32_t hash = n->getDotsTakenHash();
     uint32_t tempHash = hash;
     int numDots = goals.size();
-    vector<Node*> dots;
-    dots.push_back(n);
-    for(int i = 0; i < numDots; i++){
-        if(!(tempHash & 1)){
-            dots.push_back(goals[i]);
-        }
-        tempHash = tempHash >> 1;
+    if(memo.find(hash) != memo.end()){
+        //do nothing
     }
-    MST mst(dots, numDots);
-    int val = mst.getTotalCost();
-    return val + getNearestNeighborDistance(n, goals);
+    else { //make the mst and compute sum of edges
+        vector<Node*> dots;
+        for(int i = 0; i < numDots; i++){
+            if(!(tempHash & 1)){
+                dots.push_back(goals[i]);
+            }
+            tempHash = tempHash >> 1;
+        }
+        MST mst(dots, numDots);
+        memo[hash] = mst.getTotalCost();
+    }
+    return memo[hash] + getNearestNeighborDistance(n, goals);
+
 }
 
 void search(Maze* maze, string method){
@@ -111,7 +116,7 @@ void search(Maze* maze, string method){
                                 frontier.push_back(neighbor, cur, MST::manhattanDistance(neighbor, goal), curExploredNode->pathCost + 1);
                             }
                             else {
-                                frontier.push_back(neighbor, cur, getNearestNeighborDistance(neighbor, goals), curExploredNode->pathCost + 1);
+                                frontier.push_back(neighbor, cur, 1000*getMSTLength(neighbor, goals), curExploredNode->pathCost + 1);
                             }
                         }
                         else {
@@ -197,11 +202,11 @@ int main(int argc, char const *argv[]) {
     *******************************************************/
 
     // Maze* maze1 = new Maze("./mazes/1-2-medium-search.txt", "1.2");
-    Maze* maze2 = new Maze("./mazes/1-2-tiny-search.txt", "1.2", "dots");
+    Maze* maze2 = new Maze("./mazes/1-2-small-search.txt", "1.2", "dots");
 
     // search(maze1, "BFS");
     // maze1->printSolution();
-    search(maze2, "A*");
+    search(maze2, "A*suboptimal");
     maze2->printSolution();
 
     // delete maze1;
